@@ -1,0 +1,29 @@
+@theme {
+  /* Font */
+  --font-body: "Pretendard", sans-serif;
+
+  /* Colors */
+  --gray0: #ffffff;
+  --gray50: #f5f5f5;
+  --gray100: #fafbf7;
+  --gray200: #f2f4ed;
+  --gray300: #e6e8df;
+  --gray400: #d5d8cd;
+  --gray500: #bfc1b6;
+  --gray600: #a1a499;
+  --gray700: #7c7f76;
+  --gray800: #52534e;
+  --gray900: #262624;
+
+  --promary50: #f7fbea;
+  --promary100: #e9f6c0;
+  --promary200: #a6c154;
+  --promary300: #a2cd20;
+  --promary400: #7ea310;
+
+  --red50: #ffd7d4;
+  --red100: #fb7d74;
+  --red200: #f03e31;
+  --red300: #dc1d10;
+  --red400: #bf1004;
+}
