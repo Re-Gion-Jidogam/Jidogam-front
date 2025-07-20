@@ -1,0 +1,10 @@
+/*
+  재사용할 스타일 단위로 묶어 정의
+  1. 클래스명에 바로 사용 가능
+  2. @layer components 클래스 안에서 @apply flex-center로 적용 가능
+*/
+@utility flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
