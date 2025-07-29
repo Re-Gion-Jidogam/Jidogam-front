@@ -2,7 +2,7 @@ import { HTMLAttributes } from "react";
 
 import * as IconSet from "@/assets/icons";
 
-type IconSetKeyType = keyof typeof IconSet;
+export type IconSetKeyType = keyof typeof IconSet;
 
 interface SVGIconProps extends HTMLAttributes<SVGSVGElement> {
   icon: IconSetKeyType;
