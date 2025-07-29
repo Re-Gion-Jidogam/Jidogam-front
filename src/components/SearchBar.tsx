@@ -6,8 +6,7 @@ import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-import CloseIcon from "@/assets/icons/btn-close.svg";
-import SearchIcon from "@/assets/icons/search.svg";
+import SVGIcon from "./SVGIcon";
 
 interface SearchBarProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "prefix"> {
@@ -18,10 +17,10 @@ interface SearchBarProps
 export default function SearchBar({
   className,
   placeholder = "무엇이든 검색해보세요",
-  postfix = <CloseIcon />,
+  postfix = <SVGIcon icon="CloseIcon" />,
   prefix = (
     <i className="pl-2">
-      <SearchIcon />
+      <SVGIcon icon="SearchIcon" />
     </i>
   ),
   ...props
