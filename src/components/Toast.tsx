@@ -3,7 +3,7 @@ import clsx from "clsx";
 import SVGIcon from "./SVGIcon";
 
 interface ToastMessageProps {
-  // type: "MOVE" | "NOT_MOVE";
+  type: "MOVE" | "NOT_MOVE";
   title: string;
   message: string;
   maxLength?: number;
@@ -11,7 +11,7 @@ interface ToastMessageProps {
 }
 
 export default function Toast({
-  // type,
+  type,
   title,
   message,
   maxLength = 11,
@@ -23,16 +23,25 @@ export default function Toast({
   return (
     <div
       className={clsx(
-        "fixed top-3 left-1/2 py-3 pl-4 pr-12",
+        "fixed top-3 left-1/2 -translate-x-1/2 py-3 pl-4",
+        {
+          "pr-8": type === "NOT_MOVE",
+          "pr-4": type === "MOVE",
+        },
         "rounded-[100px] border border-gray-50 shadow-[0_4px_40px_0_rgba(0,0,0,0.1)]",
-        "bg-white flex gap-5 items-center",
+        "bg-white flex gap-2 items-center",
       )}
     >
-      <SVGIcon icon="ToastCheckIcon" />
-      <div className={clsx("flex gap-1", "font-medium text-sm text-gray-900")}>
-        <p>{truncatedTitle}</p>
-        <p>{message}</p>
+      <div className={clsx("flex gap-5 items-center")}>
+        <SVGIcon icon="ToastCheckIcon" />
+        <div
+          className={clsx("flex gap-1", "font-medium text-sm text-gray-900")}
+        >
+          <p>{truncatedTitle}</p>
+          <p>{message}</p>
+        </div>
       </div>
+      {type === "MOVE" && <SVGIcon icon="RightGrayArrow" />}
     </div>
   );
 }

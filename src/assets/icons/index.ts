@@ -9,3 +9,4 @@ export { default as MapActiveIcon } from "./map-active.svg";
 export { default as ProfileActiveIcon } from "./profile-active.svg";
 export { default as StampActiveIcon } from "./stamp-active.svg";
 export { default as ToastCheckIcon } from "./toast-icons.svg";
+export { default as RightGrayArrow } from "./right_gray_arrow.svg";
