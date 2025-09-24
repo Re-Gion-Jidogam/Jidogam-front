@@ -12,3 +12,4 @@ export { default as LightGrayStarIcon } from "./light-gray-star.svg";
 export { default as GrayStarIcon } from "./gray-star.svg";
 export { default as GrayGuideIcon } from "./guide.svg";
 export { default as ToastCheckIcon } from "./toast-icons.svg";
+export { default as RightGrayArrow } from "./right_gray_arrow.svg";
