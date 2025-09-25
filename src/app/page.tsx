@@ -1,3 +1,10 @@
+// import ToggleWrapper from "@/components/Toggle";
+import Toggle from "@/components/Toggle";
+
 export default function Home() {
-  return <h1>Hello Jidogam</h1>;
+  return (
+    <div>
+      <Toggle />
+    </div>
+  );
 }
