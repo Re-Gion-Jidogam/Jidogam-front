@@ -10,3 +10,4 @@ export { default as ProfileActiveIcon } from "./profile-active.svg";
 export { default as StampActiveIcon } from "./stamp-active.svg";
 export { default as LightGrayStarIcon } from "./light-gray-star.svg";
 export { default as GrayStarIcon } from "./gray-star.svg";
+export { default as GrayGuideIcon } from "./guide.svg";
