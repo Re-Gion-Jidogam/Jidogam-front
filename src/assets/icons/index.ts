@@ -17,3 +17,4 @@ export { default as PlaceCardImage01 } from "./place-card-image-1.svg";
 export { default as PlaceCardImage02 } from "./place-card-image-2.svg";
 export { default as PlaceCardImage03 } from "./place-card-image-3.svg";
 export { default as GrayRightChevronIcon } from "./gray-right-chevron.svg";
+export { default as WhiteStampIcon } from "./white-stamp.svg";

@@ -43,7 +43,7 @@ const Button = forwardRef((props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
     <button
       ref={ref}
       className={clsx(
-        "rounded-xl border py-3.5 px-6 text-sm text-gray-0 font-semibold cursor-pointer",
+        "rounded-xl border text-sm text-gray-0 font-semibold cursor-pointer",
         "disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-700 disabled:cursor-default",
         "transition",
         buttonVariants[color][variants],
