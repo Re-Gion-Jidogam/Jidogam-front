@@ -1,3 +1,10 @@
+import PlaceCard from "@/components/PlaceCard";
+
 export default function Home() {
-  return <h1>Hello Jidogam</h1>;
+  return (
+    <div>
+      <PlaceCard />
+      <h1>Hello Jidogam</h1>;
+    </div>
+  );
 }
