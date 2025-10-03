@@ -34,7 +34,7 @@ export default function Toast({
         "bg-white",
       )}
     >
-      <div className={clsx("flex gap-5 items-center")}>
+      <div className={clsx("flex items-center gap-5")}>
         <SVGIcon icon="ToastCheckIcon" />
         <div
           className={clsx("flex gap-1", "font-medium text-sm text-gray-900")}
