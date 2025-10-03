@@ -23,13 +23,15 @@ export default function Toast({
   return (
     <div
       className={clsx(
-        "fixed top-3 left-1/2 -translate-x-1/2 py-3 pl-4",
+        "fixed top-3 left-1/2 -translate-x-1/2",
+        "flex items-center gap-2",
+        "py-3 pl-4",
         {
           "pr-8": type === "NOT_MOVE",
           "pr-4": type === "MOVE",
         },
-        "rounded-[100px] border border-gray-50 shadow-[0_4px_40px_0_rgba(0,0,0,0.1)]",
-        "bg-white flex gap-2 items-center",
+        "bg-white border border-gray-50 rounded-[100px] shadow-[0_4px_40px_0_rgba(0,0,0,0.1)]",
+        "bg-white",
       )}
     >
       <div className={clsx("flex gap-5 items-center")}>
