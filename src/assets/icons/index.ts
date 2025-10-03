@@ -8,3 +8,8 @@ export { default as HouseActiveIcon } from "./house-active.svg";
 export { default as MapActiveIcon } from "./map-active.svg";
 export { default as ProfileActiveIcon } from "./profile-active.svg";
 export { default as StampActiveIcon } from "./stamp-active.svg";
+export { default as ChevronRightIcon } from "./chevron-right.svg";
+
+export { default as DotCircleAddIcon } from "./dot-circle-add.svg";
+export { default as DotCircleChangeIcon } from "./dot-circle-change.svg";
+export { default as DotCircleEmptyStringIcon } from "./dot-circle-empty-string.svg";
