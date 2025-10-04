@@ -9,11 +9,16 @@ interface ModalProps {
   title: string;
   body: ReactNode;
   footer: ReactNode;
+  onClickClose: () => void;
 }
 
-function ModalContainer({ title, body, footer }: ModalProps) {
+function ModalContainer({ title, body, footer, onClickClose }: ModalProps) {
   return (
-    <div className="fixed inset-0 bg-[rgba(0,0,0,0.2)]">
+    <div className="fixed inset-0">
+      <div
+        className="absolute inset-0 bg-[rgba(0,0,0,0.2)]"
+        onClick={onClickClose}
+      />
       <div
         className={clsx(
           "absolute top-1/2 left-1/2 -translate-1/2",
@@ -21,10 +26,13 @@ function ModalContainer({ title, body, footer }: ModalProps) {
         )}
       >
         <div className="flex align-center justiy-between w-full pb-6">
-          <SVGIcon
-            icon="CloseIcon"
+          <button
+            type="button"
             className="absolute top-1 right-3 cursor-pointer"
-          />
+            onClick={onClickClose}
+          >
+            <SVGIcon icon="CloseIcon" />
+          </button>
           <p className="flex-1 self-center pt-0.5 pb-2.5 text-xs font-semibold text-center">
             {title}
           </p>
