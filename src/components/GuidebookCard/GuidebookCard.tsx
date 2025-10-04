@@ -88,40 +88,25 @@ function GuidebookCardReadOnlyContent({
       <p className="text-[1.125rem] font-bold">{title}</p>
       <div>
         <div>
-          {level && <span>Lv. {level}</span>}
-          {nickname && (
-            <>
-              <span className="px-0.5"> ‧ </span>
-              <span>{nickname}</span>
-            </>
-          )}
+          <span>Lv. {level}</span>
+          <span className="px-0.5"> ‧ </span>
+          <span>{nickname}</span>
         </div>
         <div>
           <span>★{rating}</span>
-          {totalPlaceCount && (
-            <>
-              <span className="px-0.5"> ‧ </span>
-              <span>
-                총 <strong>{addCommaFormatter(totalPlaceCount)}</strong>개의
-                장소
-              </span>
-            </>
-          )}
-          {publishedDate && (
-            <>
-              <span className="px-0.5"> ‧ </span>
-              <span>
-                {addPeriodDateFormatter(new Date(publishedDate)).slice(0, -1)}에
-                출판
-              </span>
-            </>
-          )}
+          <span className="px-0.5"> ‧ </span>
+          <span>
+            총 <strong>{addCommaFormatter(totalPlaceCount)}</strong>개의 장소
+          </span>
+          <span className="px-0.5"> ‧ </span>
+          <span>
+            {addPeriodDateFormatter(new Date(publishedDate)).slice(0, -1)}에
+            출판
+          </span>
         </div>
-        {point && (
-          <p>
-            가이드북 완료 시 <strong>{addCommaFormatter(point)}p</strong>
-          </p>
-        )}
+        <p>
+          가이드북 완료 시 <strong>{addCommaFormatter(point)}p</strong>
+        </p>
       </div>
     </>
   );
