@@ -1,3 +1,14 @@
+/**
+ * 주어진 날짜를 현재 시각 기준으로 상대 시간 문자열로 변환합니다.
+ *
+ * 예:
+ *  - new Date(Date.now() - 1000 * 60 * 10) → "10분 전"
+ *  - new Date(Date.now() + 1000 * 60 * 60 * 24) → "내일"
+ *
+ * @param {Date} date - 상대 시간을 계산할 기준 날짜
+ * @param {string} [locale="ko"] - 사용할 로케일 (기본값: "ko")
+ * @returns {string} 상대 시간 문자열 (예: "3시간 전", "2일 후")
+ */
 export const formatRelativeTimeIntl = (date: Date, locale = "ko") => {
   const now = new Date();
   const diffSec = Math.floor((date.getTime() - now.getTime()) / 1000);
