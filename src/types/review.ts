@@ -1,8 +1,4 @@
-export interface Author {
-  uid: string;
-  nickname: string;
-  level: number;
-}
+import { Author } from "./guidebook";
 
 export interface Review {
   rid: string;
