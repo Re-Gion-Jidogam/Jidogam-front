@@ -25,7 +25,7 @@ function ActionSheetContainer({
       />
       <div className="absolute bottom-4 flex flex-col gap-2 w-[calc(100%-24px)]">
         <div className="overflow-hidden bg-blue-200 rounded-xl">
-          <p className="py-3 bg-[rgba(255,255,255,0.9)] text-xs font-semibold text-gray-900 text-center">
+          <p className="py-3 bg-black/20 text-xs font-semibold text-gray-900 text-center">
             {actionSheetTitle}
           </p>
           <ul className="bg-gray-0">{body}</ul>
@@ -48,7 +48,7 @@ function ActionSheetButton({
     <li
       className={clsx(
         "p-3.5 border-t border-gray-300 text-center",
-        "bg-[rgba(255,255,255,0.9)] text-gray-700",
+        "bg-white/90 text-gray-700",
         "hover:bg-gray-0 hover:text-gray-900",
         "cursor-pointer transition-colors",
         className,
