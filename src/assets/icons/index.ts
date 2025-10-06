@@ -24,3 +24,7 @@ export { default as GrayStarIcon } from "./gray-star.svg";
 export { default as GrayRightChevronIcon } from "./gray-right-chevron.svg";
 export { default as WhiteStampIcon } from "./white-stamp.svg";
 export { default as GrayGuideIcon } from "./guide.svg";
+export { default as ToggleGroupCheck } from "./toggle-group-check.svg";
+export { default as ToggleGroupLoading } from "./toggle-group-loading.svg";
+export { default as ToggleGroupWhiteCheck } from "./toggle-group-white-check.svg";
+export { default as ToggleGroupWhiteLoading } from "./toggle-group-white-loading.svg";
