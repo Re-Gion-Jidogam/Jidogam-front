@@ -42,29 +42,37 @@ export default function StampCard({ placeInfo, variant }: StampCardProps) {
   );
 }
 
-export function StampCardContent({ placeInfo, variant }: StampCardProps) {
+function StampCardContent({ placeInfo, variant }: StampCardProps) {
   const { name, category, point, address, visitedDate } = placeInfo;
 
   return (
     <div className="w-full rounded-xl gap-3.5 bg-gray-0 flex justify-between">
       <div className="w-full pl-0.5 flex flex-col gap-1">
         <p className="font-bold text-sm text-gray-900">{name}</p>
-        <div className="flex items-center gap-1">
-          <p className="font-normal text-xs text-gray-700">{category}</p>
-          <p className="font-normal text-xs text-gray-700">·</p>
+        <div
+          className={clsx(
+            "flex items-center gap-1",
+            "font-normal text-xs text-gray-700",
+          )}
+        >
+          <span>{category}</span>
+          <span>·</span>
           <div className="flex items-center gap-0.5">
             <SVGIcon icon="GrayStarIcon" />
-            <p className="font-normal text-xs text-gray-700">{point}</p>
+            <span>{point}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <p className="font-normal text-xs text-gray-700">{address}</p>
+        <div
+          className={clsx(
+            "flex items-center gap-1",
+            "font-normal text-xs text-gray-700",
+          )}
+        >
+          <span>{address}</span>
           {variant === "default" && (
             <>
-              <p className="font-normal text-xs text-gray-700">·</p>
-              <p className="font-normal text-xs text-gray-700">
-                {visitedDate}에 도장찍음
-              </p>
+              <span>·</span>
+              <span>{visitedDate}에 도장찍음</span>
             </>
           )}
         </div>
