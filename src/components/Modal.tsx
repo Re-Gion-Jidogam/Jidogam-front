@@ -15,10 +15,7 @@ interface ModalProps {
 function ModalContainer({ title, body, footer, onClickClose }: ModalProps) {
   return (
     <div className="fixed inset-0">
-      <div
-        className="absolute inset-0 bg-[rgba(0,0,0,0.2)]"
-        onClick={onClickClose}
-      />
+      <div className="absolute inset-0 bg-black/20" onClick={onClickClose} />
       <div
         className={clsx(
           "absolute top-1/2 left-1/2 -translate-1/2",
