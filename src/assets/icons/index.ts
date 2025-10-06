@@ -18,3 +18,5 @@ export { default as GrayStarIcon } from "./gray-star.svg";
 export { default as GrayRightChevronIcon } from "./gray-right-chevron.svg";
 export { default as WhiteStampIcon } from "./white-stamp.svg";
 export { default as GrayGuideIcon } from "./guide.svg";
+export { default as BottomSheetLeftChevron } from "./bottom-sheet-left-chevron.svg";
+export { default as BottomSheetHandle } from "./bottom-sheet-handle.svg";
