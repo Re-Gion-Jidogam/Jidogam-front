@@ -25,7 +25,7 @@ const buttonVariants = {
   },
 };
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "green" | "red";
   variants?: keyof (typeof buttonVariants)["green"];
 }
