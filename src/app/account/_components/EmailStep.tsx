@@ -1,3 +1,5 @@
+// 로그인 및 회원가입 페이지 (이메일 주소 입력하는 곳)
+
 import React from "react";
 
 import TextInput from "@/components/TextInput";

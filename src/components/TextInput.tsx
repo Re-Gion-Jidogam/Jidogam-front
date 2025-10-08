@@ -8,6 +8,8 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   errorMessage?: string;
   maxLength?: number;
+  rightElement?: React.ReactNode; // 글자 수 카운터 대신 다른 요소를 보여주고 싶을 때 사용
+  showCharCount?: boolean; // 글자 수 표시 여부
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
@@ -22,6 +24,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       maxLength = 50,
       value = "",
       onChange,
+      rightElement,
+      showCharCount = true,
       ...props
     },
     ref,
@@ -107,9 +111,12 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               )}
               {...props}
             />
-            <span className={clsx("inline-block", "text-xs")}>
-              {text.length} / {maxLength}
-            </span>
+            {rightElement ||
+              (showCharCount && (
+                <span className={clsx("inline-block", "text-xs")}>
+                  {text.length} / {maxLength}
+                </span>
+              ))}
           </div>
         </div>
         {isError && (
