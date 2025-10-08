@@ -8,3 +8,18 @@
   align-items: center;
   justify-content: center;
 }
+
+@layer utilities {
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 100;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-in-out forwards;
+  }
+}
