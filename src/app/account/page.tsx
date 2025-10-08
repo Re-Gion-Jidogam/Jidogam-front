@@ -1,12 +1,7 @@
 "use client";
 
-import { ExitModal } from "./_components/ExitModal";
+import { Timer } from "./_components/Timer";
 
 export default function Account() {
-  return (
-    <ExitModal
-      onClickClose={() => console.log("closed!")}
-      onConfirm={() => console.log("confirm!")}
-    />
-  );
+  return <Timer seconds={180} />;
 }
