@@ -7,6 +7,7 @@ import clsx from "clsx";
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   errorMessage?: string;
+  successMessage?: string;
   maxLength?: number;
   rightElement?: React.ReactNode; // 글자 수 카운터 대신 다른 요소를 보여주고 싶을 때 사용
   showCharCount?: boolean; // 글자 수 표시 여부
@@ -17,6 +18,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     {
       label,
       errorMessage,
+      successMessage,
       id,
       className,
       autoComplete = "off",
@@ -34,6 +36,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
     const isBlank = text.length === 0;
     const isError = Boolean(errorMessage);
+    const isSuccess = Boolean(successMessage) && !isError;
 
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
@@ -66,6 +69,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             },
             {
               "border-red-200": isError,
+              "border-primary-300": isSuccess,
             },
           )}
         >
@@ -121,6 +125,11 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         </div>
         {isError && (
           <p className={clsx("px-3", "text-xs text-red-400")}>{errorMessage}</p>
+        )}
+        {isSuccess && (
+          <p className={clsx("px-3", "text-xs text-primary-400")}>
+            {successMessage}
+          </p>
         )}
       </div>
     );

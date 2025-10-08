@@ -2,18 +2,24 @@
 
 import { useState } from "react";
 
-import { VerificationStep } from "./_components/VerificationStep";
+import { SignupStep } from "./_components/SignupStep";
 
 export default function Account() {
-  const [verificationCode, setVerificationCode] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <VerificationStep
+    <SignupStep
       email="example@example.com"
-      verificationCode={verificationCode}
-      setVerificationCode={setVerificationCode}
-      timeLeft={180}
-      onVerify={() => console.log("clicked!")}
+      nickname={nickname}
+      nicknameStatus="available"
+      password={password}
+      confirmPassword={confirmPassword}
+      onNicknameChange={setNickname}
+      onPasswordChange={setPassword}
+      onConfirmPasswordChange={setConfirmPassword}
+      onSignup={() => console.log("clicked!")}
     />
   );
 }
