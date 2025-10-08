@@ -34,6 +34,7 @@ export const useAuth = () => {
     setEmail,
     isExistingUser,
     setIsExistingUser,
+    users,
     checkUserExists,
     addUser,
     verifyLogin,

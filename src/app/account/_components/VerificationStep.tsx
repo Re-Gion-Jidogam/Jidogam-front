@@ -36,7 +36,6 @@ export function VerificationStep({
         <div className="w-full">
           <TextInput
             label="인증번호"
-            errorMessage="인증번호가 올바르지 않습니다."
             maxLength={6}
             value={verificationCode}
             onChange={(e) => {

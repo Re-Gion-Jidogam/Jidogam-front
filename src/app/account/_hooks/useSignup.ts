@@ -4,7 +4,9 @@ import { User } from "@/types/auth";
 
 export const useSignup = (users: User[]) => {
   const [nickname, setNickname] = useState(""); // 닉네임 상태
-  const [nicknameStatus, setNicknameStatus] = useState(""); // 닉네임 중복 확인 상태
+  const [nicknameStatus, setNicknameStatus] = useState<
+    "checking" | "available" | "duplicate" | ""
+  >(""); // 닉네임 중복 확인 상태
   const [password, setPassword] = useState(""); // 비밀번호 상태
   const [confirmPassword, setConfirmPassword] = useState(""); // 비밀번호 확인 상태
 
@@ -16,13 +18,11 @@ export const useSignup = (users: User[]) => {
       return;
     }
 
-    setNicknameStatus("확인중 ...");
+    setNicknameStatus("checking");
 
     setTimeout(() => {
       const isDuplicate = users.some((u) => u.nickname === value);
-      setNicknameStatus(
-        isDuplicate ? "중복된 닉네임입니다." : "사용 가능한 닉네임입니다.",
-      );
+      setNicknameStatus(isDuplicate ? "duplicate" : "available");
     }, 500);
   };
 

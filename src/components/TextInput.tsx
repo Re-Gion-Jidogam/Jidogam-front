@@ -50,14 +50,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     return (
       <div
         className={clsx(
-          "group flex flex-col gap-1 bg-gray-0",
+          "group flex flex-col gap-1",
           "font-medium text-gray-600",
           "transition-all",
         )}
       >
         <div
           className={clsx(
-            "relative flex flex-col gap-1 px-[1.125rem] transition-all",
+            "relative flex flex-col gap-1 bg-gray-0 px-[1.125rem] transition-all",
             "group-focus-within:pt-[1.6875rem] group-focus-within:pb-[0.5625rem]",
             "border border-gray-300 focus-within:border-primary-300 rounded-xl",
             {
