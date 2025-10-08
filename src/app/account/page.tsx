@@ -2,24 +2,20 @@
 
 import { useState } from "react";
 
-import { SignupStep } from "./_components/SignupStep";
+import { LoginStep } from "./_components/LoginStep";
 
 export default function Account() {
-  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("example@example.com");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <SignupStep
-      email="example@example.com"
-      nickname={nickname}
-      nicknameStatus="available"
+    <LoginStep
+      email={email}
       password={password}
-      confirmPassword={confirmPassword}
-      onNicknameChange={setNickname}
+      onEmailChange={setEmail}
       onPasswordChange={setPassword}
-      onConfirmPasswordChange={setConfirmPassword}
-      onSignup={() => console.log("clicked!")}
+      onLogin={() => console.log("Login!!")}
+      onPasswordReset={() => console.log("Reset!!")}
     />
   );
 }
