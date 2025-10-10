@@ -20,10 +20,10 @@ export const useVerification = () => {
   };
 
   // 인증번호 재발송이 필요한 경우 사용
-  const resetTimer = () => {
-    setTimeLeft(180);
-    setVerificationCode("");
-  };
+  // const resetTimer = () => {
+  //   setTimeLeft(180);
+  //   setVerificationCode("");
+  // };
 
   // 인증 코드 검증 (예시로 "123456"을 올바른 코드로 가정)
   const verifyCode = (code: string) => {
@@ -34,9 +34,7 @@ export const useVerification = () => {
     verificationCode,
     setVerificationCode,
     timeLeft: timeLeft ?? 180,
-    isVerified,
     setIsVerified,
-    resetTimer,
     verifyCode,
     startTimer,
   };

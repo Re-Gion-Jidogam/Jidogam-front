@@ -39,7 +39,10 @@ export function LoginStep({
             onPasswordChange(limited);
           }}
         />
-        <div className="flex items-center" onClick={onPasswordReset}>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={onPasswordReset}
+        >
           <p className="pl-3 font-medium text-xs text-gray-600">
             비밀번호 찾기
           </p>

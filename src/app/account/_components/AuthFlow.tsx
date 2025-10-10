@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import { useAuth } from "../_hooks/useAuth";
 import { useSignup } from "../_hooks/useSignup";
@@ -8,6 +10,8 @@ import { useVerification } from "../_hooks/useVerification";
 
 import { ConfettiScreen } from "./ConfettiScreen";
 import { EmailStep } from "./EmailStep";
+import { LoginStep } from "./LoginStep";
+import { PasswordResetStep } from "./PasswordResetStep";
 import { SignupStep } from "./SignupStep";
 import { VerificationStep } from "./VerificationStep";
 
@@ -19,7 +23,7 @@ export default function AuthFlow() {
     setEmail,
     checkUserExists,
     addUser,
-    // verifyLogin,
+    verifyLogin,
     users,
   } = useAuth();
 
@@ -27,9 +31,7 @@ export default function AuthFlow() {
     verificationCode,
     setVerificationCode,
     timeLeft,
-    // isVerified,
     setIsVerified,
-    // resetTimer,
     verifyCode,
     startTimer,
   } = useVerification();
@@ -43,6 +45,9 @@ export default function AuthFlow() {
     setConfirmPassword,
     checkNickname,
   } = useSignup(users);
+
+  const router = useRouter();
+  const [loginPassword, setLoginPassword] = useState("");
 
   useEffect(() => {
     if (currentStep === "verification") {
@@ -122,6 +127,47 @@ export default function AuthFlow() {
 
   if (currentStep === "confetti") {
     return <ConfettiScreen />;
+  }
+
+  const handleLogin = () => {
+    const user = verifyLogin(email, loginPassword);
+
+    if (user) {
+      router.push("/");
+    } else {
+      alert("비밀번호가 일치하지 않습니다");
+    }
+  };
+
+  const handlePasswordReset = () => {
+    console.log("임시 비밀번호 발송:", email);
+    setCurrentStep("password-reset");
+  };
+
+  if (currentStep === "login") {
+    return (
+      <LoginStep
+        email={email}
+        password={loginPassword}
+        onEmailChange={setEmail}
+        onPasswordChange={setLoginPassword}
+        onLogin={handleLogin}
+        onPasswordReset={handlePasswordReset}
+      />
+    );
+  }
+
+  const handlePasswordResetComplete = () => {
+    setCurrentStep("login");
+  };
+
+  if (currentStep === "password-reset") {
+    return (
+      <PasswordResetStep
+        email={email}
+        onLoginPage={handlePasswordResetComplete}
+      />
+    );
   }
 
   return <h1>Account Page</h1>;

@@ -15,6 +15,9 @@ interface SignupStepProps {
   onSignup: () => void;
 }
 
+// TODO: 비밀번호, 비밀번호 확인란 내용 일치하는지
+// TODO: 눈 토글 사용해서 보이게, 안보이게
+
 export function SignupStep({
   email,
   nickname,
