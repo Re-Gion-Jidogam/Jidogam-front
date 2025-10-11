@@ -162,7 +162,7 @@ function GuidebookCardModifyBackgroundLayer({
             key={i}
             className="absolute text-[6rem]"
             style={{
-              transform: makeEmojiLayout(i),
+              transform: makeEmojiLayout({ type: "vertical", index: i }),
             }}
           >
             {emoji}
