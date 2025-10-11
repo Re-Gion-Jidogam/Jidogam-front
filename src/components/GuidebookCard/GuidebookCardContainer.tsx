@@ -7,6 +7,7 @@ import { Guidebook } from "@/types/guidebook";
 import SVGIcon from "../SVGIcon";
 
 interface GuidebookCardContainerProps {
+  type?: "vertical" | "horizontal";
   backgroundLayer: ReactNode;
   content: ReactNode;
   header?: ReactNode;
@@ -14,6 +15,7 @@ interface GuidebookCardContainerProps {
 }
 
 export default function GuidebookCardContainer({
+  type = "vertical",
   color,
   backgroundLayer,
   header,
@@ -22,7 +24,11 @@ export default function GuidebookCardContainer({
   return (
     <div
       className={clsx(
-        "relative w-[15rem] h-[17.375rem] rounded-[20px] overflow-hidden cursor-pointer",
+        "relative rounded-[20px] overflow-hidden cursor-pointer",
+        {
+          "w-[15rem] h-[17.375rem]": type === "vertical",
+          "w-[21.785rem] h-[12.25rem]": type === "horizontal",
+        },
         color,
       )}
     >
@@ -41,10 +47,14 @@ export default function GuidebookCardContainer({
         {header}
         <div
           className={clsx(
-            "flex flex-col gap-1.5 px-4 pb-4 pt-10",
+            "flex flex-col gap-1.5 px-4 pb-4",
             "text-[0.625rem]",
-            "backdrop-blur-md mask-linear-from-75%",
-            "bg-gradient-to-b from-50% to-[rgba(0,0,0,0.2)]",
+            "backdrop-blur-md bg-gradient-to-b from-50% to-black/20",
+            {
+              "pt-10 mask-linear-from-75%": type === "vertical",
+              "justify-end h-[10rem] mask-linear-from-75%":
+                type === "horizontal",
+            },
           )}
         >
           <SVGIcon

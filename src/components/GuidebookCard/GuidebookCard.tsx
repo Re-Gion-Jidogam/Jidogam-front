@@ -1,5 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
+
+import clsx from "clsx";
+
 import { Guidebook } from "@/types/guidebook";
 import { addPeriodDateFormatter } from "@/utils/date";
 import { addCommaFormatter } from "@/utils/number";
@@ -8,21 +12,68 @@ import GuidebookCardContainer from "./GuidebookCardContainer";
 import { makeEmojiLayout } from "./utils/makeEmojiLayout";
 
 interface GuidebookCardProps {
+  type?: "vertical" | "horizontal";
+  headerType?: "none" | "rating" | "stampRate";
   guidebook: Guidebook;
 }
 
-export default function GuidebookCard({ guidebook }: GuidebookCardProps) {
-  const { color, emoji, thumbnailUrl, rating } = guidebook;
+export default function GuidebookCard({
+  type,
+  headerType = "rating",
+  guidebook,
+}: GuidebookCardProps) {
+  const {
+    color,
+    emoji,
+    thumbnailUrl,
+    rating,
+    totalPlaceCount,
+    visitedPlaceCount,
+  } = guidebook;
+
+  const stampRate = useMemo(() => {
+    if (!totalPlaceCount) return 0;
+    const r = visitedPlaceCount / totalPlaceCount;
+    return Number.isFinite(r) ? Math.max(0, Math.min(1, r)) : 0;
+  }, [visitedPlaceCount, totalPlaceCount]);
+
+  const headerComponent = {
+    rating: (
+      <span className="inline-block mx-3.5 mt-3 py-1 px-2.5 bg-gray-0 text-sm text-gray-900 rounded-full w-fit">
+        ★{rating}
+      </span>
+    ),
+    stampRate: (
+      <div
+        className={clsx(
+          "relative flex justify-between mx-3.5 mt-3 p-[1px] bg-white/40",
+          "border border-white text-xs font-semibold text-black rounded-full",
+          "backdrop-blur-sm",
+        )}
+      >
+        <span className="absolute top-1/2 left-3 -translate-y-1/2">
+          {Math.ceil(stampRate * 100)}% 완료
+        </span>
+        <span className="absolute top-1/2 right-3 -translate-y-1/2 text-[0.625rem]">
+          {visitedPlaceCount.toLocaleString()} /{" "}
+          {totalPlaceCount.toLocaleString()}
+        </span>
+        <div
+          className="h-[1.375rem] bg-white text-left rounded-full"
+          style={{ flex: `${stampRate}` }}
+        ></div>
+      </div>
+    ),
+    none: null,
+  };
 
   return (
     <GuidebookCardContainer
-      header={
-        <span className="inline-block m-4 py-1 px-2.5 bg-gray-0 text-sm text-gray-900 rounded-full w-fit">
-          ★{rating}
-        </span>
-      }
+      type={type}
+      header={headerComponent[headerType]}
       backgroundLayer={
         <GuidebookCardBackgroundLayer
+          type={type}
           color={color}
           emoji={emoji}
           thumbnailUrl={thumbnailUrl}
@@ -35,28 +86,32 @@ export default function GuidebookCard({ guidebook }: GuidebookCardProps) {
 }
 
 interface GuidebookCardBackgroundLayerProps {
+  type?: "vertical" | "horizontal";
   emoji: string | null;
   color: string | null;
   thumbnailUrl: string | null;
 }
 
 function GuidebookCardBackgroundLayer({
+  type = "vertical",
   emoji,
   color,
   thumbnailUrl,
 }: GuidebookCardBackgroundLayerProps) {
+  const emojiQuantity = type === "vertical" ? 7 : 10;
+
   return color || emoji ? (
     <div
       className="absolute inset-0 overflow-hidden rounded-[20px] z-0"
       style={{ backgroundColor: color ?? "" }}
     >
       <div className="absolute -translate-x-8 -translate-y-33 will-change-transform">
-        {Array.from({ length: 7 }, (_, i) => (
+        {Array.from({ length: emojiQuantity }, (_, i) => (
           <span
             key={i}
             className="absolute text-[6rem]"
             style={{
-              transform: makeEmojiLayout(i),
+              transform: makeEmojiLayout({ type, index: i }),
             }}
           >
             {emoji}
