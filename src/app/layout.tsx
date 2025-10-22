@@ -15,8 +15,6 @@ export const metadata: Metadata = {
   description: "너도감? 나도감! 지도감",
 };
 
-const API_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY}&autoload=false`;
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
-        <script type="text/javascript" src={API_URL} defer></script>
         {children}
         <footer className="absolute bottom-5 left-1/2 -translate-x-1/2">
           {/* <BNB /> */}
