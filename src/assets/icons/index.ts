@@ -30,3 +30,5 @@ export { default as ToggleGroupCheck } from "./toggle-group-check.svg";
 export { default as ToggleGroupLoading } from "./toggle-group-loading.svg";
 export { default as ToggleGroupWhiteCheck } from "./toggle-group-white-check.svg";
 export { default as ToggleGroupWhiteLoading } from "./toggle-group-white-loading.svg";
+export { default as EyeOpenIcon } from "./eye-open.svg";
+export { default as EyeClosedIcon } from "./eye-closed.svg";

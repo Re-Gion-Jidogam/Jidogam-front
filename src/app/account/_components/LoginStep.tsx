@@ -1,5 +1,7 @@
 // 로그인 페이지
 
+import { useState } from "react";
+
 import Button from "@/components/Button";
 import SVGIcon from "@/components/SVGIcon";
 import TextInput from "@/components/TextInput";
@@ -21,6 +23,8 @@ export function LoginStep({
   onLogin,
   onPasswordReset,
 }: LoginStepProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="w-full h-full p-3 flex flex-col items-center justify-between">
       <div className="w-full flex flex-col gap-2">
@@ -32,12 +36,26 @@ export function LoginStep({
         />
         <TextInput
           label="비밀번호"
+          type={showPassword ? "text" : "password"}
           value={password}
           maxLength={20}
+          showCharCount={false}
           onChange={(e) => {
             const limited = e.target.value.slice(0, 20);
             onPasswordChange(limited);
           }}
+          rightElement={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="w-6 h-6 cursor-pointer"
+            >
+              <SVGIcon
+                icon={showPassword ? "EyeOpenIcon" : "EyeClosedIcon"}
+                className="w-full h-full"
+              />
+            </button>
+          }
         />
         <div
           className="flex items-center cursor-pointer"
