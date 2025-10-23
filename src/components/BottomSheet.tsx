@@ -92,11 +92,7 @@ export default function BottomSheet({
             </div>
 
             {/* 내용 */}
-            <div
-              className={clsx("flex-1 overflow-y-auto p-4", {
-                "overflow-y-visible": snapPoint === "auto",
-              })}
-            >
+            <div className="flex-1 min-h-0 overflow-hidden pb-3">
               {children}
             </div>
           </motion.div>
