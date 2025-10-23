@@ -18,8 +18,6 @@ interface SignupStepProps {
   onSignup: () => void;
 }
 
-// TODO: 비밀번호, 비밀번호 확인란 내용 일치하는지
-
 export function SignupStep({
   email,
   nickname,
@@ -34,26 +32,35 @@ export function SignupStep({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  let errorMessage = "";
-  let successMessage = "";
+  let nicknameErrorMessage = "";
+  let nicknameSuccessMessage = "";
 
   switch (nicknameStatus) {
     case "available":
-      errorMessage = "";
-      successMessage = "사용 가능한 닉네임입니다.";
+      nicknameErrorMessage = "";
+      nicknameSuccessMessage = "사용 가능한 닉네임입니다.";
       break;
     case "checking":
-      errorMessage = "";
-      successMessage = "확인 중 ...";
+      nicknameErrorMessage = "";
+      nicknameSuccessMessage = "확인 중 ...";
       break;
     case "duplicate":
-      errorMessage = "중복된 닉네임입니다.";
-      successMessage = "";
+      nicknameErrorMessage = "중복된 닉네임입니다.";
+      nicknameSuccessMessage = "";
       break;
     default:
-      errorMessage = "";
-      successMessage = "";
+      nicknameErrorMessage = "";
+      nicknameSuccessMessage = "";
   }
+
+  // 비밀번호 확인 검증
+  const passwordErrorMessage =
+    confirmPassword && password !== confirmPassword
+      ? "비밀번호가 일치하지 않습니다."
+      : "";
+
+  const isPasswordMatch =
+    password && confirmPassword && password === confirmPassword;
 
   return (
     <div className="w-full h-full flex flex-col justify-between items-center p-3">
@@ -73,8 +80,8 @@ export function SignupStep({
           <TextInput
             label="닉네임"
             value={nickname}
-            errorMessage={errorMessage}
-            successMessage={successMessage}
+            errorMessage={nicknameErrorMessage}
+            successMessage={nicknameSuccessMessage}
             maxLength={15}
             onChange={(e) => {
               const limited = e.target.value.slice(0, 15);
@@ -113,6 +120,7 @@ export function SignupStep({
             value={confirmPassword}
             maxLength={20}
             showCharCount={false}
+            errorMessage={passwordErrorMessage}
             onChange={(e) => {
               const limited = e.target.value.slice(0, 20);
               onConfirmPasswordChange(limited);
@@ -141,7 +149,8 @@ export function SignupStep({
           !nickname ||
           nicknameStatus !== "available" ||
           !password ||
-          !confirmPassword
+          !confirmPassword ||
+          !isPasswordMatch
         }
         className="w-full py-3.5"
       >
