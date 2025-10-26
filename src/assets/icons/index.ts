@@ -24,6 +24,8 @@ export { default as PlaceCardImage03 } from "./place-card-image-3.svg";
 export { default as TravelStampIcon } from "./travel-stamp.svg";
 export { default as GrayRightChevronIcon } from "./gray-right-chevron.svg";
 export { default as WhiteStampIcon } from "./white-stamp.svg";
+export { default as BottomSheetLeftChevron } from "./bottom-sheet-left-chevron.svg";
+export { default as BottomSheetHandle } from "./bottom-sheet-handle.svg";
 export { default as ToggleGroupCheck } from "./toggle-group-check.svg";
 export { default as ToggleGroupLoading } from "./toggle-group-loading.svg";
 export { default as ToggleGroupWhiteCheck } from "./toggle-group-white-check.svg";
