@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "./globals.css";
-// import BNB from "@/components/BNB";
+import BNB from "@/components/BNB";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -25,11 +25,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
-        <script type="text/javascript" src={API_URL} defer></script>
-        {children}
-        <footer className="absolute bottom-5 left-1/2 -translate-x-1/2">
-          {/* <BNB /> */}
-        </footer>
+        <div className="w-screen">
+          <main className="w-[23.4375rem] min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
+            <script type="text/javascript" src={API_URL} defer></script>
+            {children}
+            <footer className="fixed bottom-5 left-1/2 -translate-x-1/2">
+              <BNB />
+            </footer>
+          </main>
+        </div>
       </body>
     </html>
   );

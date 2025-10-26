@@ -9,9 +9,13 @@ import { makeEmojiLayout } from "./utils/makeEmojiLayout";
 
 interface GuidebookCardProps {
   guidebook: Guidebook;
+  className?: string;
 }
 
-export default function GuidebookCard({ guidebook }: GuidebookCardProps) {
+export default function GuidebookCard({
+  guidebook,
+  ...props
+}: GuidebookCardProps) {
   const { color, emoji, thumbnailUrl, rating } = guidebook;
 
   return (
@@ -30,6 +34,7 @@ export default function GuidebookCard({ guidebook }: GuidebookCardProps) {
       }
       content={<GuidebookCardReadOnlyContent guidebook={guidebook} />}
       color={color}
+      {...props}
     />
   );
 }

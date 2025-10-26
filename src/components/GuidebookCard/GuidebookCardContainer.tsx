@@ -11,6 +11,7 @@ interface GuidebookCardContainerProps {
   content: ReactNode;
   header?: ReactNode;
   color?: Guidebook["color"];
+  className?: string;
 }
 
 export default function GuidebookCardContainer({
@@ -18,12 +19,14 @@ export default function GuidebookCardContainer({
   backgroundLayer,
   header,
   content,
+  className,
 }: GuidebookCardContainerProps) {
   return (
     <div
       className={clsx(
         "relative w-[15rem] h-[17.375rem] rounded-[20px] overflow-hidden cursor-pointer",
         color,
+        className,
       )}
     >
       {backgroundLayer}
