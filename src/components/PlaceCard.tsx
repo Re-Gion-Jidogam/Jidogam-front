@@ -1,5 +1,9 @@
 import clsx from "clsx";
+import Image from "next/image";
 
+import PlaceCardImage01 from "@/assets/imgs/place-card-image-1.png";
+import PlaceCardImage02 from "@/assets/imgs/place-card-image-2.png";
+import PlaceCardImage03 from "@/assets/imgs/place-card-image-3.png";
 import { PlaceCardProps } from "@/types/placecard";
 
 import Button from "./Button";
@@ -168,9 +172,15 @@ function PlaceCardContent({
       )}
 
       <div className="flex gap-2">
-        <SVGIcon icon="PlaceCardImage01" />
-        <SVGIcon icon="PlaceCardImage02" />
-        <SVGIcon icon="PlaceCardImage03" />
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage01} alt="sample-image-1" />
+        </div>
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage02} alt="sample-image-2" />
+        </div>
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage03} alt="sample-image-3" />
+        </div>
       </div>
     </div>
   );
