@@ -8,9 +8,14 @@ import SVGIcon from "./SVGIcon";
 interface StampCardProps {
   placeInfo: PlaceCardBase;
   variant: "default" | "stamp" | "stamp-disabled";
+  onClick?: () => void;
 }
 
-export default function StampCard({ placeInfo, variant }: StampCardProps) {
+export default function StampCard({
+  placeInfo,
+  variant,
+  onClick,
+}: StampCardProps) {
   return (
     <div
       className={clsx(
@@ -33,6 +38,7 @@ export default function StampCard({ placeInfo, variant }: StampCardProps) {
           variants={variant === "stamp" ? "primary" : "ghost"}
           className="flex flex-col items-center justify-center w-14 h-14 border border-white/60 !rounded-lg"
           disabled={variant === "stamp-disabled"}
+          onClick={onClick}
         >
           <SVGIcon icon="WhiteStampIcon" />
           <p className="font-semibold text-[10px] text-white">50</p>
