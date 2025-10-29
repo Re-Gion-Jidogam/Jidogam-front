@@ -28,27 +28,14 @@ export default function Account() {
     router.push("/cta");
   };
 
-  let title = "";
-  switch (currentStep) {
-    case "email":
-      title = "로그인 및 회원가입";
-      break;
-    case "verification":
-      title = "회원가입";
-      break;
-    case "signup":
-      title = "회원가입";
-      break;
-    case "login":
-      title = "로그인";
-      break;
-    case "passwordReset":
-      title = "비밀번호 찾기";
-      break;
-    case "confetti":
-      title = "가입완료";
-      break;
-  }
+  const currentStepMap: Record<string, string> = {
+    email: "로그인 및 회원가입",
+    verification: "회원가입",
+    signup: "회원가입",
+    login: "로그인",
+    passwordReset: "비밀번호 찾기",
+    confetti: "가입완료",
+  };
 
   return (
     <>
@@ -60,7 +47,9 @@ export default function Account() {
         onBack={handleBack}
       >
         <div className="w-full flex items-center justify-center">
-          <p className="font-semibold text-sm text-gray-800">{title}</p>
+          <p className="font-semibold text-sm text-gray-800">
+            {currentStepMap[currentStep] ?? ""}
+          </p>
         </div>
         <AuthFlow />
       </BottomSheet>
