@@ -29,3 +29,4 @@ export { default as ToggleGroupWhiteCheck } from "./toggle-group-white-check.svg
 export { default as ToggleGroupWhiteLoading } from "./toggle-group-white-loading.svg";
 export { default as EyeOpenIcon } from "./eye-open.svg";
 export { default as EyeClosedIcon } from "./eye-closed.svg";
+export { default as ProfileBadgeIcon } from "./profile-badge.svg";
