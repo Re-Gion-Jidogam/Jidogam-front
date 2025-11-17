@@ -22,4 +22,13 @@
   .animate-fade-in {
     animation: fade-in 0.3s ease-in-out forwards;
   }
+
+  /* 스크롤바 감추기 */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }

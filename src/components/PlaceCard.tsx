@@ -1,11 +1,16 @@
 import clsx from "clsx";
+import Image from "next/image";
 
+import PlaceCardImage01 from "@/assets/imgs/place-card-image-1.png";
+import PlaceCardImage02 from "@/assets/imgs/place-card-image-2.png";
+import PlaceCardImage03 from "@/assets/imgs/place-card-image-3.png";
 import { PlaceCardProps } from "@/types/placecard";
 
 import Button from "./Button";
 import SVGIcon from "./SVGIcon";
 
 export default function PlaceCard({
+  pid,
   name,
   category,
   point,
@@ -14,6 +19,7 @@ export default function PlaceCard({
   guidebookCount,
   variant,
   children,
+  className,
 }: PlaceCardProps & {
   children?: React.ReactNode;
 }) {
@@ -22,9 +28,11 @@ export default function PlaceCard({
       className={clsx(
         "flex flex-col w-fit gap-3.5 p-4 rounded-xl",
         "border border-gray-200 shadow-[2px_2px_10px_0px_rgba(0,0,0,0.002)]",
+        className,
       )}
     >
       <PlaceCardContent
+        pid={pid}
         name={name}
         category={category}
         point={point}
@@ -104,22 +112,26 @@ function PlaceCardContent({
             >
               {address}
             </p>
-            <p
-              className={clsx("font-normal text-xs", {
-                "text-gray-700": variant !== "stamp-disabled",
-                "text-gray-500": variant == "stamp-disabled",
-              })}
-            >
-              ·
-            </p>
-            <p
-              className={clsx("font-normal text-xs", {
-                "text-gray-700": variant !== "stamp-disabled",
-                "text-gray-500": variant == "stamp-disabled",
-              })}
-            >
-              {visitedDate}에 도장찍음
-            </p>
+            {variant !== "default" && (
+              <>
+                <p
+                  className={clsx("font-normal text-xs", {
+                    "text-gray-700": variant !== "stamp-disabled",
+                    "text-gray-500": variant == "stamp-disabled",
+                  })}
+                >
+                  ·
+                </p>
+                <p
+                  className={clsx("font-normal text-xs", {
+                    "text-gray-700": variant !== "stamp-disabled",
+                    "text-gray-500": variant == "stamp-disabled",
+                  })}
+                >
+                  {visitedDate}에 도장찍음
+                </p>
+              </>
+            )}
           </div>
         </div>
         {variant === "stamp" && (
@@ -142,22 +154,33 @@ function PlaceCardContent({
         )}
       </div>
 
-      <div className="flex items-center">
-        <p
-          className={clsx("font-normal text-xs", {
-            "text-gray-700": variant !== "stamp-disabled",
-            "text-gray-500": variant == "stamp-disabled",
-          })}
-        >
-          이 장소가 포함된 가이드북 {guidebookCount}개
-        </p>
-        <SVGIcon icon="GrayRightChevronIcon" />
-      </div>
+      {variant !== "default" && (
+        <div className="flex items-center">
+          <p
+            className={clsx("font-normal text-xs", {
+              "text-gray-700": variant !== "stamp-disabled",
+              "text-gray-500": variant == "stamp-disabled",
+            })}
+          >
+            이 장소가 포함된 가이드북 {guidebookCount}개
+          </p>
+          <SVGIcon
+            icon="GrayRightChevronIcon"
+            className="w-3.5 h-3.5 fill-gray-700"
+          />
+        </div>
+      )}
 
       <div className="flex gap-2">
-        <SVGIcon icon="PlaceCardImage01" />
-        <SVGIcon icon="PlaceCardImage02" />
-        <SVGIcon icon="PlaceCardImage03" />
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage01} alt="sample-image-1" />
+        </div>
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage02} alt="sample-image-2" />
+        </div>
+        <div className="w-[6.25rem]">
+          <Image src={PlaceCardImage03} alt="sample-image-3" />
+        </div>
       </div>
     </div>
   );
