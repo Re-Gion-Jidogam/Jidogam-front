@@ -15,12 +15,14 @@ interface GuidebookCardProps {
   type?: "vertical" | "horizontal";
   headerType?: "none" | "rating" | "stampRate";
   guidebook: Guidebook;
+  className?: string;
 }
 
 export default function GuidebookCard({
   type,
   headerType = "rating",
   guidebook,
+  ...props
 }: GuidebookCardProps) {
   const {
     color,
@@ -81,6 +83,7 @@ export default function GuidebookCard({
       }
       content={<GuidebookCardReadOnlyContent guidebook={guidebook} />}
       color={color}
+      {...props}
     />
   );
 }

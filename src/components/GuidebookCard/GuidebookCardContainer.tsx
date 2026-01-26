@@ -12,6 +12,7 @@ interface GuidebookCardContainerProps {
   content: ReactNode;
   header?: ReactNode;
   color?: Guidebook["color"];
+  className?: string;
 }
 
 export default function GuidebookCardContainer({
@@ -20,6 +21,7 @@ export default function GuidebookCardContainer({
   backgroundLayer,
   header,
   content,
+  className,
 }: GuidebookCardContainerProps) {
   return (
     <div
@@ -30,6 +32,7 @@ export default function GuidebookCardContainer({
           "w-[21.785rem] h-[12.25rem]": type === "horizontal",
         },
         color,
+        className,
       )}
     >
       {backgroundLayer}

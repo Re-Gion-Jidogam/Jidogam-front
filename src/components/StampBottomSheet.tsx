@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-import { dummyPlaceCards } from "@/constants/dummy";
+import { dummyPlaces } from "@/constants/dummy";
 
 import BottomSheet from "./BottomSheet";
 import SearchBar from "./SearchBar";
@@ -90,7 +90,7 @@ export default function StampBottomSheet() {
           </div>
         </div>
         <ul className="flex-1 flex flex-col gap-3 overflow-scroll scrollbar-hide">
-          {dummyPlaceCards.map((p) => (
+          {dummyPlaces.map((p) => (
             <li key={p.name}>
               <StampCard
                 variant={

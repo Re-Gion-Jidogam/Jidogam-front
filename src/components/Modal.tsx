@@ -14,7 +14,7 @@ interface ModalProps {
 
 function ModalContainer({ title, body, footer, onClickClose }: ModalProps) {
   return (
-    <div className="fixed inset-0 animate-fade-in">
+    <div className="fixed inset-0 animate-fade-in z-50">
       <div className="absolute inset-0 bg-black/20" onClick={onClickClose} />
       <div
         className={clsx(

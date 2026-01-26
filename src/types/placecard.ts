@@ -1,4 +1,5 @@
 export interface PlaceCardBase {
+  pid: string;
   name: string;
   category: string;
   point: number;
@@ -7,8 +8,13 @@ export interface PlaceCardBase {
   guidebookCount: string;
 }
 
-export type PlaceCardVariant = "bottom-button" | "stamp" | "stamp-disabled";
+export type PlaceCardVariant =
+  | "default"
+  | "bottom-button"
+  | "stamp"
+  | "stamp-disabled";
 
 export interface PlaceCardProps extends PlaceCardBase {
   variant?: PlaceCardVariant;
+  className?: string;
 }
