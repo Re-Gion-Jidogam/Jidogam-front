@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
         <div className="w-screen">
-          <main className="w-[23.4375rem] min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
+          <main className="min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
             {children}
             <footer className="fixed bottom-5 left-1/2 -translate-x-1/2">
               <BNB />
