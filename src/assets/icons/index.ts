@@ -18,7 +18,6 @@ export { default as DotCircleChangeIcon } from "./dot-circle-change.svg";
 export { default as DotCircleEmptyStringIcon } from "./dot-circle-empty-string.svg";
 export { default as ToastCheckIcon } from "./toast-icons.svg";
 export { default as RightGrayArrow } from "./right_gray_arrow.svg";
-export { default as TravelStampIcon } from "./travel-stamp.svg";
 export { default as GrayRightChevronIcon } from "./gray-right-chevron.svg";
 export { default as WhiteStampIcon } from "./white-stamp.svg";
 export { default as BottomSheetLeftChevron } from "./bottom-sheet-left-chevron.svg";
@@ -29,3 +28,4 @@ export { default as ToggleGroupWhiteCheck } from "./toggle-group-white-check.svg
 export { default as ToggleGroupWhiteLoading } from "./toggle-group-white-loading.svg";
 export { default as EyeOpenIcon } from "./eye-open.svg";
 export { default as EyeClosedIcon } from "./eye-closed.svg";
+export { default as GrayThumbUpIcon } from "./gray-thumb-up.svg";

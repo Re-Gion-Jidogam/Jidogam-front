@@ -1,5 +1,7 @@
 import clsx from "clsx";
+import Image from "next/image";
 
+import TravelStamp from "@/assets/imgs/travel-stamp.png";
 import { PlaceCardBase } from "@/types/placecard";
 
 import Button from "./Button";
@@ -22,10 +24,7 @@ export default function StampCard({ placeInfo, variant }: StampCardProps) {
     >
       <StampCardContent placeInfo={placeInfo} variant={variant} />
       {variant === "default" && (
-        <SVGIcon
-          icon="TravelStampIcon"
-          className="absolute top-0 right-0 bottom-0 h-full"
-        />
+        <Image src={TravelStamp} alt="STAMP" priority />
       )}
       {variant !== "default" && (
         <Button

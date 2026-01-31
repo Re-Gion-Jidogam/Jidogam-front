@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ctaBackground from "@/assets/icons/cta_background.png";
+import ctaBackground from "@/assets/imgs/cta_background.png";
 
 export default function CTA() {
   return (
