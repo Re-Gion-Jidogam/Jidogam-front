@@ -23,10 +23,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
         <div className="w-screen">
-          <main
-            id="jidogam-main"
-            className="relative w-[23.4375rem] h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-scroll"
-          >
+          <main className="min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
             {children}
             <footer className="fixed bottom-0 left-1/2 -translate-x-1/2">
               <BNB />

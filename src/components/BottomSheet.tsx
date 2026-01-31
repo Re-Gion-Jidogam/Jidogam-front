@@ -27,12 +27,11 @@ export default function BottomSheet({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const $main = document.getElementById("jidogam-main")!;
     if (isOpen) {
       setIsVisible(true);
-      $main.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
     } else {
-      $main.style.overflow = "";
+      document.body.style.overflow = "";
       const timer = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timer);
     }
@@ -47,7 +46,7 @@ export default function BottomSheet({
           {/* 배경 클릭 시 닫기 (snapPoint가 95vh일 때만) */}
           {snapPoint === "95vh" && (
             <motion.div
-              className="absolute inset-0 z-40 bg-black/20"
+              className="fixed inset-0 z-40 bg-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -57,7 +56,7 @@ export default function BottomSheet({
 
           <motion.div
             className={clsx(
-              "absolute bottom-0 left-0 right-0 z-50",
+              "fixed bottom-0 left-0 right-0 z-50",
               "flex flex-col",
               {
                 "h-[96px]": snapPoint === "96px",

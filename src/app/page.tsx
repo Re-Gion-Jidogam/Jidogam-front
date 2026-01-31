@@ -44,7 +44,7 @@ export default function Home() {
         <SubTitle title="당신을 기다리는 곳" />
         <div
           className={clsx(
-            "relative w-[23.4375rem] h-[17.375rem] overflow-scroll",
+            "relative h-[17.375rem] overflow-scroll",
             "scrollbar-hide snap-x snap-mandatory scroll-smooth",
           )}
         >
@@ -70,7 +70,7 @@ export default function Home() {
         <SubTitle title="인기 가이드북" />
         <div
           className={clsx(
-            "relative w-[23.4375rem] h-[17.375rem] overflow-scroll",
+            "relative h-[17.375rem] overflow-scroll",
             "scrollbar-hide snap-x snap-mandatory scroll-smooth",
           )}
         >
@@ -96,7 +96,7 @@ export default function Home() {
         <SubTitle title="인기 장소" />
         <div
           className={clsx(
-            "relative w-[23.4375rem] h-[13.5rem] overflow-scroll",
+            "relative h-[13.5rem] overflow-scroll",
             "scrollbar-hide snap-x snap-mandatory scroll-smooth",
           )}
         >

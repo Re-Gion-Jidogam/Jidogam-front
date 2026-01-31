@@ -1,7 +1,9 @@
 import { MouseEvent } from "react";
 
 import clsx from "clsx";
+import Image from "next/image";
 
+import TravelStamp from "@/assets/imgs/travel-stamp.png";
 import { PlaceCardBase } from "@/types/placecard";
 
 import Button from "./Button";
@@ -21,17 +23,18 @@ export default function StampCard({
   return (
     <div
       className={clsx(
-        "w-full rounded-xl border border-gray-200 p-4 shadow-[2px_2px_10px_0px_rgba(0,0,0,0.02)] bg-gray-0 relative",
-        {
-          "flex items-center justify-between": variant !== "default",
-        },
+        "relative flex items-center justify-between w-full p-4 bg-gray-0",
+        "rounded-xl border border-gray-200",
+        "shadow-[2px_2px_10px_0px_rgba(0,0,0,0.02)] overflow-hidden",
       )}
     >
       <StampCardContent placeInfo={placeInfo} variant={variant} />
       {variant === "default" && (
-        <SVGIcon
-          icon="TravelStampIcon"
-          className="absolute top-0 right-0 bottom-0 h-full"
+        <Image
+          className="absolute right-0 scale-[1.25]"
+          src={TravelStamp}
+          alt="STAMP"
+          priority
         />
       )}
       {variant !== "default" && (
