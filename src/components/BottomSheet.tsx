@@ -27,11 +27,12 @@ export default function BottomSheet({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const $main = document.getElementById("jidogam-main")!;
     if (isOpen) {
       setIsVisible(true);
-      document.body.style.overflow = "hidden";
+      $main.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "";
+      $main.style.overflow = "";
       const timer = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timer);
     }
@@ -81,14 +82,17 @@ export default function BottomSheet({
             }}
           >
             {/* 돌아가기 버튼 + handler */}
-            <div className="relative flex justify-center items-start pb-[18px] cursor-grab active:cursor-grabbing">
+            <div className="relative flex justify-center items-start pb-[18px]">
               {showBackButton && (
-                <div onClick={onBack} className="absolute top-2 left-2">
+                <div
+                  onClick={onBack}
+                  className="absolute top-2 left-2 cursor-pointer"
+                >
                   <SVGIcon icon="BottomSheetLeftChevron" />
                 </div>
               )}
 
-              <div className="w-12 h-1 bg-black/30 rounded-[10px] mt-3" />
+              <div className="w-12 h-1 bg-black/30 rounded-[10px] mt-3 cursor-grab active:cursor-grabbing" />
             </div>
 
             {/* 내용 */}

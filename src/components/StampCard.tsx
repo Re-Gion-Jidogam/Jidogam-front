@@ -1,3 +1,5 @@
+import { MouseEvent } from "react";
+
 import clsx from "clsx";
 
 import { PlaceCardBase } from "@/types/placecard";
@@ -8,7 +10,7 @@ import SVGIcon from "./SVGIcon";
 interface StampCardProps {
   placeInfo: PlaceCardBase;
   variant: "default" | "stamp" | "stamp-disabled";
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>, placeName: string) => void;
 }
 
 export default function StampCard({
@@ -38,7 +40,7 @@ export default function StampCard({
           variants={variant === "stamp" ? "primary" : "ghost"}
           className="flex flex-col items-center justify-center w-14 h-14 border border-white/60 !rounded-lg"
           disabled={variant === "stamp-disabled"}
-          onClick={onClick}
+          onClick={(e) => onClick?.(e, placeInfo.name)}
         >
           <SVGIcon icon="WhiteStampIcon" />
           <p className="font-semibold text-[10px] text-white">50</p>

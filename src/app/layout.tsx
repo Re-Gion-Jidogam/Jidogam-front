@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 
 import "./globals.css";
 import BNB from "@/components/BNB";
-import StampBottomSheet from "@/components/StampBottomSheet";
+import StampBottomSheet from "@/components/StampBottomSheet/StampBottomSheet";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -23,7 +23,10 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
         <div className="w-screen">
-          <main className="relative w-[23.4375rem] h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-scroll">
+          <main
+            id="jidogam-main"
+            className="relative w-[23.4375rem] h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-scroll"
+          >
             {children}
             <footer className="fixed bottom-0 left-1/2 -translate-x-1/2">
               <BNB />

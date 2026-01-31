@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -8,26 +8,36 @@ import { useRouter } from "next/navigation";
 
 import { dummyPlaces } from "@/constants/dummy";
 
-import BottomSheet from "./BottomSheet";
-import SearchBar from "./SearchBar";
-import StampCard from "./StampCard";
+import BottomSheet from "../BottomSheet";
+import SearchBar from "../SearchBar";
+import StampCard from "../StampCard";
+
+import { StampModal } from "./StampModal";
+
+const ONE_MINUTE = 60 * 1_000;
+const WAITING_TIME_AFTER_STAMP = 30 * ONE_MINUTE;
 
 export default function StampBottomSheet() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [stampBottomSheetOpen, setStampBottomSheetOpen] = useState(false);
   const [stampTime, setStampTime] = useState(-1);
+
+  const [stampPlaceName, setStampPlaceName] = useState("");
+  const [isStampModalOpen, setIsStampModalOpen] = useState(false);
+
   const stampRef = useRef<NodeJS.Timeout>(null);
 
   const bottomSheetOpenHandler = useCallback(
-    (value: boolean) => {
-      setIsOpen(value);
+    (isOpen: boolean) => {
+      setStampBottomSheetOpen(isOpen);
 
-      if (!value) {
+      if (!isOpen) {
         const stampParams = new URLSearchParams(searchParams);
         stampParams.delete("stamp");
+        stampParams.delete("word");
 
         router.push(`${pathname}?${stampParams.toString()}`, { scroll: false });
       }
@@ -35,21 +45,32 @@ export default function StampBottomSheet() {
     [router, pathname, searchParams],
   );
 
-  const stampClickHandler = () => {
+  const stampClickHandler = (
+    _: MouseEvent<HTMLButtonElement>,
+    placeName: string,
+  ) => {
+    setIsStampModalOpen(true);
+    setStampPlaceName(placeName);
+  };
+
+  const confirmStamp = () => {
     if (stampRef.current !== null) {
       clearInterval(stampRef.current);
     }
 
-    setStampTime(1 * 60 * 1_000);
+    setStampTime(WAITING_TIME_AFTER_STAMP);
+
     stampRef.current = setInterval(() => {
       setStampTime((prev) => {
-        const nextTick = prev - 60 * 1_000;
+        const nextTick = prev - ONE_MINUTE;
         if (stampRef.current && nextTick === 0) {
           clearInterval(stampRef.current);
         }
         return nextTick;
       });
-    }, 60 * 1_000);
+    }, ONE_MINUTE);
+
+    setIsStampModalOpen(false);
   };
 
   useEffect(() => {
@@ -60,9 +81,10 @@ export default function StampBottomSheet() {
 
   return (
     <BottomSheet
-      isOpen={isOpen}
+      isOpen={stampBottomSheetOpen}
       snapPoint="95vh"
       onClose={() => bottomSheetOpenHandler(false)}
+      onBack={() => bottomSheetOpenHandler(false)}
       showBackButton
     >
       <p
@@ -107,6 +129,13 @@ export default function StampBottomSheet() {
           ))}
         </ul>
       </div>
+      {isStampModalOpen && (
+        <StampModal
+          placeName={stampPlaceName}
+          onClickClose={() => setIsStampModalOpen(false)}
+          onConfirm={confirmStamp}
+        />
+      )}
     </BottomSheet>
   );
 }
