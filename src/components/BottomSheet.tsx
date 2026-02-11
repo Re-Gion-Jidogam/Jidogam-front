@@ -12,8 +12,10 @@ interface BottomSheetProps {
   onClose: () => void;
   children: React.ReactNode;
   snapPoint?: SnapPoint;
+  snapPoints?: SnapPoint[];
   showBackButton?: boolean;
   onBack?: () => void;
+  onSnapChange?: (snapPoint: SnapPoint) => void;
 }
 
 export default function BottomSheet({
@@ -21,10 +23,17 @@ export default function BottomSheet({
   onClose,
   children,
   snapPoint = "45vh",
+  snapPoints,
   showBackButton = false,
   onBack,
+  onSnapChange,
 }: BottomSheetProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentSnap, setCurrentSnap] = useState(snapPoint);
+
+  useEffect(() => {
+    setCurrentSnap(snapPoint);
+  }, [snapPoint]);
 
   useEffect(() => {
     if (isOpen) {
@@ -37,14 +46,39 @@ export default function BottomSheet({
     }
   }, [isOpen]);
 
+  const handleDragEnd = (_: unknown, info: { offset: { y: number } }) => {
+    if (!snapPoints || snapPoints.length < 2) {
+      if (info.offset.y > 100) onClose();
+      return;
+    }
+
+    const currentIndex = snapPoints.indexOf(currentSnap);
+
+    // 아래로 스와이프 → 더 작은 snap
+    if (info.offset.y > 50 && currentIndex < snapPoints.length - 1) {
+      const next = snapPoints[currentIndex + 1];
+      setCurrentSnap(next);
+      onSnapChange?.(next);
+    }
+    // 위로 스와이프 → 더 큰 snap
+    else if (info.offset.y < -50 && currentIndex > 0) {
+      const next = snapPoints[currentIndex - 1];
+      setCurrentSnap(next);
+      onSnapChange?.(next);
+    }
+    // 많이 내리면 닫기
+    else if (info.offset.y > 200) {
+      onClose();
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* 배경 클릭 시 닫기 (snapPoint가 95vh일 때만) */}
-          {snapPoint === "95vh" && (
+          {currentSnap === "95vh" && (
             <motion.div
               className="fixed inset-0 z-40 bg-black/20"
               initial={{ opacity: 0 }}
@@ -59,13 +93,14 @@ export default function BottomSheet({
               "fixed bottom-0 left-0 right-0 z-50",
               "flex flex-col p-3",
               {
-                "h-[96px]": snapPoint === "96px",
-                "h-[45vh]": snapPoint === "45vh",
-                "h-auto": snapPoint === "auto",
-                "h-[95vh]": snapPoint === "95vh",
+                "h-[96px]": currentSnap === "96px",
+                "h-[45vh]": currentSnap === "45vh",
+                "h-auto": currentSnap === "auto",
+                "h-[95vh]": currentSnap === "95vh",
               },
               "bg-[#F5F5F5]/80 backdrop-blur-2xl",
               "rounded-t-[20px] shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.1)]",
+              "transition-[height] duration-300 ease-out",
             )}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
@@ -74,28 +109,21 @@ export default function BottomSheet({
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.2}
-            onDragEnd={(_, info) => {
-              if (info.offset.y > 100) {
-                onClose();
-              }
-            }}
+            onDragEnd={handleDragEnd}
           >
-            {/* 돌아가기 버튼 + handler */}
             <div className="relative flex justify-center items-start pb-[18px] cursor-grab active:cursor-grabbing">
               {showBackButton && (
                 <div onClick={onBack} className="absolute left-0">
                   <SVGIcon icon="BottomSheetLeftChevron" />
                 </div>
               )}
-
               <div className="w-12 h-1 bg-black/30 rounded-[10px]" />
             </div>
 
-            {/* 내용 */}
             <div
               className={clsx("flex-1 min-h-0 pb-3", {
-                "overflow-y-auto": snapPoint === "auto",
-                "overflow-hidden": snapPoint !== "auto",
+                "overflow-y-auto": currentSnap === "auto",
+                "overflow-hidden": currentSnap !== "auto",
               })}
             >
               {children}

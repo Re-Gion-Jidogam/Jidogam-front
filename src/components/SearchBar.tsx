@@ -52,17 +52,14 @@ export default function SearchBar({
         "flex items-center gap-2 px-4 py-1.5",
         "rounded-full",
         "shadow-[0_4px_20px_0_rgba(0,0,0,0.1)]",
+        className,
       )}
     >
       {prefix}
       <input
         ref={searchInputRef}
         placeholder={placeholder}
-        className={clsx(
-          "peer flex-1 outline-none",
-          "text-xs text-gray-800",
-          className,
-        )}
+        className={clsx("peer flex-1 outline-none", "text-xs text-gray-800")}
         {...props}
       />
       {postfix && (

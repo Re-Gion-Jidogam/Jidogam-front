@@ -9,7 +9,7 @@ import SVGIcon from "./SVGIcon";
 
 interface StampCardProps {
   placeInfo: PlaceCardBase;
-  variant: "default" | "stamp" | "stamp-disabled";
+  variant: "default" | "stamp" | "stamp-disabled" | "none";
 }
 
 export default function StampCard({ placeInfo, variant }: StampCardProps) {
@@ -26,7 +26,7 @@ export default function StampCard({ placeInfo, variant }: StampCardProps) {
       {variant === "default" && (
         <Image src={TravelStamp} alt="STAMP" priority />
       )}
-      {variant !== "default" && (
+      {variant !== "default" && variant !== "none" && (
         <Button
           color="green"
           variants={variant === "stamp" ? "primary" : "ghost"}
