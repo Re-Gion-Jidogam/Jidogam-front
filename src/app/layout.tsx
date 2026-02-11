@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 
 import "./globals.css";
 import BNB from "@/components/BNB";
-import PlaceBottomSheet from "@/components/PlaceBottomSheet";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -30,7 +29,6 @@ export default function RootLayout({
             <footer className="fixed bottom-5 left-1/2 -translate-x-1/2">
               <BNB />
             </footer>
-            <PlaceBottomSheet />
           </main>
         </div>
       </body>

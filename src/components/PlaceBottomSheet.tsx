@@ -51,12 +51,12 @@ export default function PlaceBottomSheet() {
                 <Button className="w-full border border-white/60 px-3 py-3">
                   내 가이드북에 추가
                 </Button>
-                {/* <Button
+                <Button
                   className="w-full border border-white/60 px-3 py-3"
                   onClick={() => setIsClickedStamping(true)}
                 >
                   도장찍기
-                </Button> */}
+                </Button>
                 {/* <button className="bg-gray-300 w-full rounded-xl font-semibold text-xs text-gray-700">
                 도장 찍기
                 <br />
@@ -64,14 +64,14 @@ export default function PlaceBottomSheet() {
                   너무 멀리 있는 장소예요
                 </span>
               </button> */}
-                <Button
+                {/* <Button
                   color="red"
                   variants="outlined"
                   className="w-full px-3 py-3"
                   onClick={() => setIsClickedStampingCanceled(true)}
                 >
                   도장 지우기
-                </Button>
+                </Button> */}
               </PlaceCard>
             </div>
           ) : (
