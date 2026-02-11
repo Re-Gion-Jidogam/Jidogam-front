@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import profileBadge from "@/assets/imgs/profile-badge.png";
 import ProfileMap from "@/assets/imgs/profile-map.png";
@@ -66,8 +67,10 @@ export default function Page() {
         </div>
       </div>
 
-      {/* 두 번째 프로필 카드 */}
-      <div className="w-full flex gap-3.5 items-center justify-center bg-white rounded-2xl">
+      <Link
+        href="/profile/detail"
+        className="w-full flex gap-3.5 items-center justify-center bg-white rounded-2xl"
+      >
         <div className="flex gap-2.5 items-center">
           <Image src={ProfileMap} alt="MAP" height={180} />
         </div>
@@ -82,7 +85,7 @@ export default function Page() {
             89개의 가이드북
           </p>
         </div>
-      </div>
+      </Link>
 
       {/* 세 번째 줄 프로필 카드 2개 */}
       <div className="w-full flex gap-3 items-center justify-center">
