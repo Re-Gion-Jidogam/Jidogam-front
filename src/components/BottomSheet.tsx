@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import SVGIcon from "./SVGIcon";
 
-type SnapPoint = "96px" | "45vh" | "auto" | "95vh";
+export type SnapPoint = "96px" | "45vh" | "auto" | "95vh";
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -120,12 +120,7 @@ export default function BottomSheet({
               <div className="w-12 h-1 bg-black/30 rounded-[10px]" />
             </div>
 
-            <div
-              className={clsx("flex-1 min-h-0 pb-3", {
-                "overflow-y-auto": currentSnap === "auto",
-                "overflow-hidden": currentSnap !== "auto",
-              })}
-            >
+            <div className="flex-1 min-h-0 pb-3 overflow-y-auto">
               {children}
             </div>
           </motion.div>
