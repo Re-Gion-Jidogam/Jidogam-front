@@ -57,7 +57,7 @@ export default function BottomSheet({
           <motion.div
             className={clsx(
               "fixed bottom-0 left-0 right-0 z-50",
-              "flex flex-col p-3",
+              "flex flex-col",
               {
                 "h-[96px]": snapPoint === "96px",
                 "h-[45vh]": snapPoint === "45vh",
@@ -81,14 +81,17 @@ export default function BottomSheet({
             }}
           >
             {/* 돌아가기 버튼 + handler */}
-            <div className="relative flex justify-center items-start pb-[18px] cursor-grab active:cursor-grabbing">
+            <div className="relative flex justify-center items-start pb-[18px]">
               {showBackButton && (
-                <div onClick={onBack} className="absolute left-0">
+                <div
+                  onClick={onBack}
+                  className="absolute top-2 left-2 cursor-pointer"
+                >
                   <SVGIcon icon="BottomSheetLeftChevron" />
                 </div>
               )}
 
-              <div className="w-12 h-1 bg-black/30 rounded-[10px]" />
+              <div className="w-12 h-1 bg-black/30 rounded-[10px] mt-3 cursor-grab active:cursor-grabbing" />
             </div>
 
             {/* 내용 */}

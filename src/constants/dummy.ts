@@ -201,7 +201,7 @@ export const dummyPlaces: PlaceCardProps[] = [
     category: "카페",
     point: 4.6,
     address: "서울특별시 마포구 연남동 223-17",
-    visitedDate: "2025-10-10",
+    visitedDate: "",
     guidebookCount: "3",
   },
   {
@@ -210,7 +210,7 @@ export const dummyPlaces: PlaceCardProps[] = [
     category: "관광명소",
     point: 4.8,
     address: "서울특별시 마포구 망원로 467",
-    visitedDate: "2025-09-22",
+    visitedDate: "",
     guidebookCount: "5",
   },
   {
