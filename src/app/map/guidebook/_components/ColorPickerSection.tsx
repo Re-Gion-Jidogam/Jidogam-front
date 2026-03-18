@@ -3,18 +3,30 @@
 import clsx from "clsx";
 
 import { GuidebookModifyCard } from "@/components/GuidebookCard";
-import { CardValueType } from "@/components/GuidebookCard/GuidebookModifyCard";
+import {
+  CardValueType,
+  GuidebookCardModifyBackgroundLayerMode,
+} from "@/components/GuidebookCard/GuidebookModifyCard";
 
-const RAINBOW_GRADIENT =
-  "linear-gradient(90deg, #FF2929 0%, #FF7B29 15.64%, #FFF429 30.69%, #12FF12 46.61%, #2962FF 65.81%, #C929FF 81.88%, #FF292C 99.01%)";
+import {
+  ACTIVE_SLIDER_VARS,
+  DISABLED_SLIDER_VARS,
+  DISABLED_TRACK_COLOR,
+  RAINBOW_GRADIENT,
+  SLIDER_BASE_CLASSES,
+  THUMB_CLASSES,
+} from "@/app/map/guidebook/_constants/colorPicker";
 
 interface ColorPickerSectionProps {
   color: string | null;
   emoji: string | null;
   thumbnailUrl: string | null;
   sliderValue: number;
+  cardMode: GuidebookCardModifyBackgroundLayerMode;
+  disabled?: boolean;
   onCardValueChange: (cardValue: CardValueType) => void;
   onSliderChange: (value: number) => void;
+  onClickSelectCardType: () => void;
 }
 
 export default function ColorPickerSection({
@@ -22,52 +34,43 @@ export default function ColorPickerSection({
   emoji,
   thumbnailUrl,
   sliderValue,
+  cardMode,
+  disabled = false,
   onCardValueChange,
   onSliderChange,
+  onClickSelectCardType,
 }: ColorPickerSectionProps) {
   return (
     <section className="flex flex-col items-center gap-5">
       <GuidebookModifyCard
-        mode="none"
+        mode={cardMode}
         color={color}
         emoji={emoji}
         thumbnailUrl={thumbnailUrl}
         onChangeCardValue={onCardValueChange}
-        onClickSelectCardType={() => {}}
+        onClickSelectCardType={onClickSelectCardType}
       />
 
-      <div className="w-full py-[2px] px-[34px]">
+      <div
+        className={clsx(
+          "w-[70%] max-w-xs py-[2px] px-[34px]",
+          disabled && "pointer-events-none",
+        )}
+      >
         <input
           type="range"
           min={0}
           max={100}
           value={sliderValue}
+          disabled={disabled}
           onChange={(e) => onSliderChange(Number(e.target.value))}
-          className={clsx(
-            "w-full h-2 rounded-[100px] cursor-pointer appearance-none",
-            "border border-gray-0",
-            "shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)]",
-            "[&::-webkit-slider-thumb]:appearance-none",
-            "[&::-webkit-slider-thumb]:w-6",
-            "[&::-webkit-slider-thumb]:h-6",
-            "[&::-webkit-slider-thumb]:rounded-full",
-            "[&::-webkit-slider-thumb]:bg-gray-0/40",
-            "[&::-webkit-slider-thumb]:border",
-            "[&::-webkit-slider-thumb]:border-gray-0",
-            "[&::-webkit-slider-thumb]:shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)]",
-            "[&::-webkit-slider-thumb]:backdrop-blur-[10px]",
-            "[&::-webkit-slider-thumb]:cursor-pointer",
-            "[&::-moz-range-thumb]:w-6",
-            "[&::-moz-range-thumb]:h-6",
-            "[&::-moz-range-thumb]:rounded-full",
-            "[&::-moz-range-thumb]:bg-gray-0/40",
-            "[&::-moz-range-thumb]:border",
-            "[&::-moz-range-thumb]:border-gray-0",
-            "[&::-moz-range-thumb]:shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)]",
-            "[&::-moz-range-thumb]:backdrop-blur-[10px]",
-            "[&::-moz-range-thumb]:cursor-pointer",
-          )}
-          style={{ background: RAINBOW_GRADIENT }}
+          className={clsx(SLIDER_BASE_CLASSES, THUMB_CLASSES)}
+          style={
+            {
+              ...(disabled ? DISABLED_SLIDER_VARS : ACTIVE_SLIDER_VARS),
+              background: disabled ? DISABLED_TRACK_COLOR : RAINBOW_GRADIENT,
+            } as React.CSSProperties
+          }
         />
       </div>
     </section>
