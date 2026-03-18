@@ -7,8 +7,11 @@ import BottomSheet from "@/components/BottomSheet";
 import Button from "@/components/Button";
 
 import ColorPickerSection from "./_components/ColorPickerSection";
+import ExitConfirmModal from "./_components/ExitConfirmModal";
 import GuidebookCreateHeader from "./_components/GuidebookCreateHeader";
 import GuidebookFormSection from "./_components/GuidebookFormSection";
+import PublishGuideModal from "./_components/PublishGuideModal";
+import ThumbnailActionSheet from "./_components/ThumbnailActionSheet";
 import { useGuidebookCreate } from "./_hooks/useGuidebookCreate";
 
 export default function GuidebookCreatePage() {
@@ -18,10 +21,24 @@ export default function GuidebookCreatePage() {
   const {
     form,
     canPublish,
+    cardMode,
+    isColorPickerDisabled,
+    isExitModalOpen,
+    isActionSheetOpen,
+    isPublishModalOpen,
+    handleExitRequest,
+    handleExitCancel,
+    handleOpenActionSheet,
+    handleCloseActionSheet,
+    handleSelectEmoji,
+    handleImageUpload,
     handleSliderChange,
     handleTitleChange,
     handleDescriptionChange,
-    handlePublishToggle,
+    handlePublishToggleRequest,
+    handlePublishConfirm,
+    handlePublishModalClose,
+    handlePublishOff,
     handleCardValueChange,
     handleSubmit,
   } = useGuidebookCreate();
@@ -32,10 +49,26 @@ export default function GuidebookCreatePage() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-gray-200">
-      <BottomSheet isOpen={isOpen} onClose={handleClose} snapPoint="95vh">
+    <div className="relative w-full h-screen bg-gray-200 overflow-x-hidden">
+      {isExitModalOpen && (
+        <ExitConfirmModal onCancel={handleExitCancel} onConfirm={handleClose} />
+      )}
+      {isPublishModalOpen && (
+        <PublishGuideModal
+          onConfirm={handlePublishConfirm}
+          onClose={handlePublishModalClose}
+        />
+      )}
+      {isActionSheetOpen && (
+        <ThumbnailActionSheet
+          onClose={handleCloseActionSheet}
+          onSelectEmoji={handleSelectEmoji}
+          onImageUpload={handleImageUpload}
+        />
+      )}
+      <BottomSheet isOpen={isOpen} onClose={handleExitRequest} snapPoint="95vh">
         <div className="flex flex-col h-full overflow-hidden">
-          <GuidebookCreateHeader onBack={handleClose} />
+          <GuidebookCreateHeader onBack={handleExitRequest} />
 
           <div className="flex-1 overflow-y-auto px-5 pb-4 space-y-5 min-h-0">
             <ColorPickerSection
@@ -43,14 +76,18 @@ export default function GuidebookCreatePage() {
               emoji={form.emoji}
               thumbnailUrl={form.thumbnailUrl}
               sliderValue={form.sliderValue}
+              cardMode={cardMode}
+              disabled={isColorPickerDisabled}
               onCardValueChange={handleCardValueChange}
               onSliderChange={handleSliderChange}
+              onClickSelectCardType={handleOpenActionSheet}
             />
 
             <GuidebookFormSection
+              isPublished={form.isPublished}
               canPublish={canPublish}
               description={form.description}
-              onPublishToggle={handlePublishToggle}
+              onPublishToggle={form.isPublished ? handlePublishOff : handlePublishToggleRequest}
               onTitleChange={handleTitleChange}
               onDescriptionChange={handleDescriptionChange}
             />
