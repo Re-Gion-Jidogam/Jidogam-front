@@ -6,14 +6,16 @@ import Toggle from "@/components/Toggle";
 const DESCRIPTION_MAX_LENGTH = 300;
 
 interface GuidebookFormSectionProps {
+  isPublished: boolean;
   canPublish: boolean;
   description: string;
-  onPublishToggle: (isPublished: boolean) => void;
+  onPublishToggle: () => void;
   onTitleChange: (title: string) => void;
   onDescriptionChange: (description: string) => void;
 }
 
 export default function GuidebookFormSection({
+  isPublished,
   canPublish,
   description,
   onPublishToggle,
@@ -23,12 +25,22 @@ export default function GuidebookFormSection({
   return (
     <>
       <section className="py-1">
-        <Toggle
-          label="가이드북 출판"
-          initial={false}
-          disabled={!canPublish}
-          onChange={onPublishToggle}
-        />
+        <div className="relative inline-flex">
+          <div className="pointer-events-none">
+            <Toggle
+              key={String(isPublished)}
+              label="가이드북 출판"
+              initial={isPublished}
+              disabled={!canPublish}
+            />
+          </div>
+          {canPublish && (
+            <div
+              className="absolute inset-0 cursor-pointer"
+              onClick={onPublishToggle}
+            />
+          )}
+        </div>
       </section>
 
       <TextInput
@@ -52,11 +64,9 @@ function DescriptionTextarea({ value, onChange }: DescriptionTextareaProps) {
 
   return (
     <div className="group flex flex-col gap-1 font-medium text-gray-600 transition-all">
-      <div
-        className="relative flex flex-col bg-gray-0 px-[1.125rem] py-[1.125rem] transition-all border border-gray-300 focus-within:border-primary-300 rounded-xl"
-      >
+      <div className="relative flex flex-col bg-gray-0 px-4.5 py-4.5 transition-all border border-gray-300 focus-within:border-primary-300 rounded-xl">
         {isBlank && (
-          <label className="absolute left-[1.125rem] top-[1.125rem] text-sm font-medium text-gray-600 pointer-events-none">
+          <label className="absolute left-4.5 top-4.5 text-sm font-medium text-gray-600 pointer-events-none">
             가이드북 설명
           </label>
         )}
