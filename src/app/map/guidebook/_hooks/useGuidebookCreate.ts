@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   CardValueType,
@@ -30,6 +30,7 @@ export function useGuidebookCreate() {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [cardMode, setCardMode] =
     useState<GuidebookCardModifyBackgroundLayerMode>("none");
   const [form, setForm] = useState<GuidebookCreateForm>({
@@ -95,8 +96,16 @@ export function useGuidebookCreate() {
     setIsActionSheetOpen(false);
   };
 
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
   const handleSubmit = () => {
     console.log("Creating guidebook:", form);
+    setShowToast(true);
   };
 
   const isColorPickerDisabled = form.thumbnailUrl !== null;
@@ -125,5 +134,6 @@ export function useGuidebookCreate() {
     handlePublishOff,
     handleCardValueChange,
     handleSubmit,
+    showToast,
   };
 }
