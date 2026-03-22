@@ -52,6 +52,7 @@ export default function GuidebookCreateSheet({
   } = useGuidebookCreate();
 
   const handleClose = () => {
+    handleExitCancel();
     onClose();
   };
 
@@ -59,7 +60,7 @@ export default function GuidebookCreateSheet({
     <>
       {showToast && (
         <div
-          className="fixed top-0 left-0 right-0 z-[100] cursor-pointer w-full"
+          className="fixed top-0 left-0 right-0 z-100 cursor-pointer w-full"
           onClick={() => router.push("/map/guidebook/list/search")}
         >
           <Toast type="MOVE" title="가이드북을 만들었어요!" message="" />
