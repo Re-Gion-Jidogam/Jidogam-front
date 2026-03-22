@@ -9,6 +9,7 @@ interface MapControlButtonProps {
   onMapClick?: () => void;
   locationAriaLabel?: string;
   mapAriaLabel?: string;
+  className?: string;
 }
 
 export default function MapControlButton({
@@ -17,6 +18,7 @@ export default function MapControlButton({
   onMapClick,
   locationAriaLabel,
   mapAriaLabel,
+  className,
 }: MapControlButtonProps) {
   const isDouble = variant === "double";
 
@@ -40,6 +42,7 @@ export default function MapControlButton({
         isDouble
           ? "w-[42px] h-[86px] gap-0.5 backdrop-blur-[10px]"
           : "w-[42px] h-[42px]",
+        className,
       )}
     >
       {isDouble && (

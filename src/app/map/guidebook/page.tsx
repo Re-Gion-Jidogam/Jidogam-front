@@ -3,7 +3,9 @@
 import { useState } from "react";
 
 import { GuidebookCard } from "@/components/GuidebookCard";
+import MapControlButton from "@/components/MapControlButton";
 import SearchBar from "@/components/SearchBar";
+import SegmentGroup from "@/components/SegmentGroup";
 import ToggleGroup from "@/components/ToggleGroup";
 
 import BannerCard from "./_components/BannerCard";
@@ -29,6 +31,30 @@ export default function GuidebookPage() {
 
   return (
     <>
+      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center">
+        <SegmentGroup
+          segments={[
+            { label: "내 도장", url: "stamp" },
+            { label: "장소", url: "map" },
+            { label: "가이드북", url: "guidebook" },
+          ]}
+        />
+      </div>
+
+      <button
+        onClick={() => setIsCreateSheetOpen(true)}
+        aria-label="가이드북 만들기"
+        className="fixed left-4 bottom-[calc(62vh+12px)] z-50 w-[42px] h-[42px] flex items-center justify-center rounded-xl bg-white/50 border border-white shadow-[0px_4px_20px_0px_#0000001A] backdrop-blur-[10px] text-2xl font-light text-gray-700 leading-none cursor-pointer"
+      >
+        +
+      </button>
+
+      <MapControlButton
+        variant="double"
+        onLocationClick={() => {}}
+        className="fixed right-4 bottom-[calc(62vh+12px)] z-50"
+      />
+
       <div className="fixed bottom-0 left-0 right-0 h-[62vh] z-50 flex flex-col bg-[#F5F5F5]/80 backdrop-blur-2xl rounded-t-[20px] shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.1)]">
         <div className="relative flex justify-center items-start pb-[18px]">
           <div className="w-12 h-1 bg-black/30 rounded-[10px] mt-3" />
@@ -40,15 +66,10 @@ export default function GuidebookPage() {
           </div>
 
           <div className="flex gap-3 px-5 pb-5">
-            <BannerCard
-              image={BannerStar}
-              label="인기 가이드북"
-              variant="star"
-            />
+            <BannerCard image={BannerStar} variant="star" />
             <BannerCard
               image={BannerHeart}
               label="지나가던사람님을"
-              secondLine="기다리는 곳"
               variant="heart"
             />
           </div>
@@ -73,7 +94,7 @@ export default function GuidebookPage() {
                   type="horizontal"
                   headerType="rating"
                   guidebook={guidebook}
-                  className="!w-full"
+                  className="w-full!"
                 />
               ))}
             </div>
