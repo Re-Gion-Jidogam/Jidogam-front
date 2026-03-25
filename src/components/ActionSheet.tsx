@@ -54,7 +54,7 @@ function ActionSheetButton({
         className,
       )}
     >
-      <button className="cursor-pointer" disabled={disabled} {...props}>
+      <button className="w-full cursor-pointer" disabled={disabled} {...props}>
         {children}
       </button>
     </li>
