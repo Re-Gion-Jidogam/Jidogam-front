@@ -8,11 +8,11 @@ import SearchBar from "@/components/SearchBar";
 import SegmentGroup from "@/components/SegmentGroup";
 import ToggleGroup from "@/components/ToggleGroup";
 
-import BannerCard from "./_components/BannerCard";
-import GuidebookCreateSheet from "./_components/Guidebook/GuidebookCreateSheet";
-import BannerHeart from "./_assets/banner-heart.svg";
-import BannerStar from "./_assets/banner-star.svg";
-import { MOCK_MY_GUIDEBOOKS } from "./_mocks/guidebooks";
+import BannerCard from "./_domain/components/BannerCard";
+import GuidebookCreateSheet from "./_domain/components/Guidebook/GuidebookCreateSheet";
+import BannerHeart from "./_domain/assets/banner-heart.svg";
+import BannerStar from "./_domain/assets/banner-star.svg";
+import { MOCK_MY_GUIDEBOOKS } from "./_domain/mocks/guidebooks";
 
 const FILTER_ITEMS = [
   { id: "published", label: "출판됨", image: "ToggleGroupCheck" as const },
