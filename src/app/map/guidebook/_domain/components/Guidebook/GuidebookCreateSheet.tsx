@@ -12,7 +12,7 @@ import GuidebookCreateHeader from "./GuidebookCreateHeader";
 import GuidebookFormSection from "./GuidebookFormSection";
 import PublishGuideModal from "../Modal/PublishGuideModal";
 import ThumbnailActionSheet from "../ThumbnailActionSheet";
-import { useGuidebookCreate } from "../../_hooks/useGuidebookCreate";
+import { useGuidebookCreate } from "../../hooks/useGuidebookCreate";
 
 interface GuidebookCreateSheetProps {
   isOpen: boolean;

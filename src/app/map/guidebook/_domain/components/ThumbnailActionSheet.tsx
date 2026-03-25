@@ -1,13 +1,15 @@
 "use client";
 
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import ActionSheet from "@/components/ActionSheet";
 
+import EmojiPickerBottomSheet from "./EmojiPickerBottomSheet";
+
 interface ThumbnailActionSheetProps {
   onClose: () => void;
-  onSelectEmoji: () => void;
+  onSelectEmoji: (emoji: string) => void;
   onImageUpload: (file: File) => void;
 }
 
@@ -17,11 +19,34 @@ export default function ThumbnailActionSheet({
   onImageUpload,
 }: ThumbnailActionSheetProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) onImageUpload(file);
   };
+
+  const handleEmojiButtonClick = () => {
+    setIsEmojiPickerOpen(true);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    onSelectEmoji(emoji);
+    onClose();
+  };
+
+  const handleEmojiPickerClose = () => {
+    onClose();
+  };
+
+  if (isEmojiPickerOpen) {
+    return (
+      <EmojiPickerBottomSheet
+        onSelectEmoji={handleEmojiSelect}
+        onClose={handleEmojiPickerClose}
+      />
+    );
+  }
 
   return createPortal(
     <div className="fixed inset-0 z-60">
@@ -44,7 +69,7 @@ export default function ThumbnailActionSheet({
           onClickBackdrop={onClose}
           body={
             <>
-              <ActionSheet.Button onClick={onSelectEmoji}>
+              <ActionSheet.Button onClick={handleEmojiButtonClick}>
                 이모지
               </ActionSheet.Button>
               <ActionSheet.Button onClick={() => fileInputRef.current?.click()}>

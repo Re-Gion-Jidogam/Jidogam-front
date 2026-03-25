@@ -15,7 +15,7 @@ import {
   RAINBOW_GRADIENT,
   SLIDER_BASE_CLASSES,
   THUMB_CLASSES,
-} from "@/app/map/guidebook/_constants/colorPicker";
+} from "@/app/map/guidebook/_domain/constants/colorPicker";
 
 interface ColorPickerSectionProps {
   color: string | null;
