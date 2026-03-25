@@ -9,7 +9,7 @@ import SegmentGroup from "@/components/SegmentGroup";
 import ToggleGroup from "@/components/ToggleGroup";
 
 import BannerCard from "./_components/BannerCard";
-import GuidebookCreateSheet from "./_components/GuidebookCreateSheet";
+import GuidebookCreateSheet from "./_components/Guidebook/GuidebookCreateSheet";
 import BannerHeart from "./_assets/banner-heart.svg";
 import BannerStar from "./_assets/banner-star.svg";
 import { MOCK_MY_GUIDEBOOKS } from "./_mocks/guidebooks";

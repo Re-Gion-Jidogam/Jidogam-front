@@ -47,6 +47,7 @@ export default function GuidebookFormSection({
         placeholder="가이드북 제목"
         maxLength={20}
         onChange={(e) => onTitleChange(e.target.value)}
+        // className="group-focus-within:-top-2.25 not-placeholder-shown:-top-2.25 transition-[top]" /* 원본 컴포넌트 수정 가능하다면 삭제하기 */
       />
 
       <DescriptionTextarea value={description} onChange={onDescriptionChange} />

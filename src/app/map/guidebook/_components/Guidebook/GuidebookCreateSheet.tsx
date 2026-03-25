@@ -6,13 +6,13 @@ import BottomSheet from "@/components/BottomSheet";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
 
-import ColorPickerSection from "./ColorPickerSection";
-import ExitConfirmModal from "./ExitConfirmModal";
+import ColorPickerSection from "../ColorPickerSection";
+import ExitConfirmModal from "../Modal/ExitConfirmModal";
 import GuidebookCreateHeader from "./GuidebookCreateHeader";
 import GuidebookFormSection from "./GuidebookFormSection";
-import PublishGuideModal from "./PublishGuideModal";
-import ThumbnailActionSheet from "./ThumbnailActionSheet";
-import { useGuidebookCreate } from "../_hooks/useGuidebookCreate";
+import PublishGuideModal from "../Modal/PublishGuideModal";
+import ThumbnailActionSheet from "../ThumbnailActionSheet";
+import { useGuidebookCreate } from "../../_hooks/useGuidebookCreate";
 
 interface GuidebookCreateSheetProps {
   isOpen: boolean;
