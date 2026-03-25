@@ -24,7 +24,6 @@ interface ChallengeButtonConfig {
 export default function GuidebookDetailPage() {
   const router = useRouter();
 
-  // TODO: 추후 TanStack Query useMutation으로 교체 예정
   const isChallenging = false;
   const isMaxChallenges = false;
 
@@ -33,7 +32,11 @@ export default function GuidebookDetailPage() {
 
   const challengeButtonProps: ChallengeButtonConfig = (() => {
     if (isMaxChallenges)
-      return { label: "도전하기", disabled: true, subText: "20개까지만 도전가능해요" };
+      return {
+        label: "도전하기",
+        disabled: true,
+        subText: "20개까지만 도전가능해요",
+      };
     if (isChallenging)
       return { label: "도전 취소", color: "red", variants: "outlined" };
     return { label: "도전하기", color: "green", variants: "primary" };
@@ -67,13 +70,11 @@ export default function GuidebookDetailPage() {
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto pt-4">
-        {/* 헤더 */}
         <div className="px-5 pt-2 pb-4">
           <h1 className="text-2xl font-bold text-gray-900">전국 빵집 리스트</h1>
           <p className="text-sm text-gray-600 mt-1">Lv. 3132 · 지나가던 사람</p>
         </div>
 
-        {/* 액션 버튼 */}
         <div className="flex gap-3 px-5 pb-5">
           <div className="flex flex-1 flex-col items-center gap-1">
             <Button
@@ -85,7 +86,9 @@ export default function GuidebookDetailPage() {
               {challengeButtonProps.label}
             </Button>
             {challengeButtonProps.subText && (
-              <p className="text-xs text-gray-500">{challengeButtonProps.subText}</p>
+              <p className="text-xs text-gray-500">
+                {challengeButtonProps.subText}
+              </p>
             )}
           </div>
           <Button color="green" variants="outlined" className="flex-1 py-3">
@@ -93,9 +96,10 @@ export default function GuidebookDetailPage() {
           </Button>
         </div>
 
-        {/* 리뷰 섹션 */}
         <div className="pb-5">
-          <p className="px-5 mb-3 text-sm font-semibold text-gray-900">881개의 리뷰</p>
+          <p className="px-5 mb-3 text-sm font-semibold text-gray-900">
+            881개의 리뷰
+          </p>
           <div className="flex gap-3 px-5 overflow-x-auto scrollbar-hide">
             {dummyReviews.map((review) => (
               <ReviewCard key={review.rid} review={review} />
@@ -103,9 +107,10 @@ export default function GuidebookDetailPage() {
           </div>
         </div>
 
-        {/* 장소 섹션 */}
         <div className="pb-5">
-          <p className="px-5 mb-3 text-sm font-semibold text-gray-900">8,819개의 장소</p>
+          <p className="px-5 mb-3 text-sm font-semibold text-gray-900">
+            8,819개의 장소
+          </p>
 
           <div className="flex gap-2 px-5 mb-3">
             <button
