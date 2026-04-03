@@ -16,7 +16,12 @@ export function ChallengeButton({
   if (isMaxChallenges) {
     return (
       <div className="flex flex-1 flex-col items-center gap-1">
-        <Button color="green" variants="primary" disabled className="w-full py-3">
+        <Button
+          color="green"
+          variants="primary"
+          disabled
+          className="w-full py-3"
+        >
           도전하기
         </Button>
         <p className="text-xs text-gray-500">
