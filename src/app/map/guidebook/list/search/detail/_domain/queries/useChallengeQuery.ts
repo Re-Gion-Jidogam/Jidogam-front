@@ -8,7 +8,7 @@ export interface ChallengeStatus {
 async function fetchChallengeStatus(
   _guidebookId: string,
 ): Promise<ChallengeStatus> {
-  return Promise.resolve({ isChallenging: false, challengeCount: 0 });
+  return Promise.resolve({ isChallenging: true, challengeCount: 0 });
 }
 
 export function useChallengeQuery(guidebookId: string) {
