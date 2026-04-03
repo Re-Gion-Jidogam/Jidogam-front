@@ -1,18 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
+import ActionSheet from "@/components/ActionSheet";
 import PlaceCard from "@/components/PlaceCard";
 
 import { dummyPlaces } from "../../../_domain/mocks/dummyPlaces";
 import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStore";
 import { GUIDEBOOK_COUNT, PLACE_COUNT } from "../constants/guidebookConstants";
 
-export function PlaceSection() {
+interface PlaceSectionProps {
+  isOwner: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
   const router = useRouter();
   const { showVisited, showUnvisited, toggleVisited, toggleUnvisited } =
     useSearchFilterStore();
+
+  const [selectedPid, setSelectedPid] = useState<string | null>(null);
 
   const noneActive = !showVisited && !showUnvisited;
   const bothActive = showVisited && showUnvisited;
@@ -27,6 +37,24 @@ export function PlaceSection() {
 
   function handlePlaceClick(pid: string) {
     router.push(`/map/place/${pid}`);
+  }
+
+  function handleOptionClick(pid: string) {
+    setSelectedPid(pid);
+  }
+
+  function handleEditClick() {
+    onEdit();
+    setSelectedPid(null);
+  }
+
+  function handleDeleteClick() {
+    onDelete();
+    setSelectedPid(null);
+  }
+
+  function handleCloseActionSheet() {
+    setSelectedPid(null);
   }
 
   return (
@@ -64,10 +92,13 @@ export function PlaceSection() {
 
       <div className="flex flex-col gap-4 px-5 mb-6">
         {filteredPlaces.map((place) => (
-          <button
+          <div
             key={place.pid}
-            className="text-left w-full"
+            role="button"
+            tabIndex={0}
+            className="text-left w-full cursor-pointer"
             onClick={() => handlePlaceClick(place.pid)}
+            onKeyDown={(e) => e.key === "Enter" && handlePlaceClick(place.pid)}
           >
             <PlaceCard
               pid={place.pid}
@@ -79,10 +110,35 @@ export function PlaceSection() {
               guidebookCount={GUIDEBOOK_COUNT}
               variant="bottom-button"
               className="w-full! bg-white"
+              onOptionClick={
+                isOwner ? () => handleOptionClick(place.pid) : undefined
+              }
             />
-          </button>
+          </div>
         ))}
       </div>
+
+      {selectedPid !== null && (
+        <ActionSheet
+          actionSheetTitle="장소 관리"
+          onClickBackdrop={handleCloseActionSheet}
+          body={
+            <>
+              <ActionSheet.Button onClick={handleEditClick}>
+                편집하기
+              </ActionSheet.Button>
+              <ActionSheet.Button onClick={handleDeleteClick}>
+                삭제
+              </ActionSheet.Button>
+            </>
+          }
+          footer={
+            <ActionSheet.Button onClick={handleCloseActionSheet}>
+              취소
+            </ActionSheet.Button>
+          }
+        />
+      )}
     </div>
   );
 }
