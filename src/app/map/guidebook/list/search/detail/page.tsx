@@ -85,7 +85,7 @@ export default function GuidebookDetailPage() {
       )}
       <div className="fixed bottom-0 z-1 left-0 right-0 h-[62vh] flex flex-col bg-[#F5F5F5]/80 rounded-t-2xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.1)]">
         <div className="flex items-center justify-center pt-3 pb-2">
-          <div className="w-12 h-1 bg-black/30 rounded-[10px]" />
+          <div className="w-12 h-1 bg-black/30 rounded-[10px] mb-4" />
           <button
             onClick={() => router.back()}
             className="absolute top-3 left-3 cursor-pointer"
