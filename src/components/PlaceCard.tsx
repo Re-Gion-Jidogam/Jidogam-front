@@ -20,6 +20,7 @@ export default function PlaceCard({
   variant,
   children,
   className,
+  onOptionClick,
 }: PlaceCardProps & {
   children?: React.ReactNode;
 }) {
@@ -40,6 +41,7 @@ export default function PlaceCard({
         visitedDate={visitedDate}
         guidebookCount={guidebookCount}
         variant={variant}
+        onOptionClick={onOptionClick}
       />
 
       {variant === "bottom-button" && (
@@ -57,6 +59,7 @@ function PlaceCardContent({
   visitedDate,
   guidebookCount,
   variant,
+  onOptionClick,
 }: PlaceCardProps) {
   return (
     <div className="flex flex-col w-fit gap-3.5">
@@ -134,6 +137,17 @@ function PlaceCardContent({
             )}
           </div>
         </div>
+        {onOptionClick && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onOptionClick();
+            }}
+            className="p-1 text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            ⋮
+          </button>
+        )}
         {variant === "stamp" && (
           <Button
             color="green"
