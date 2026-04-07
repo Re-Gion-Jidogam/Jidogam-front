@@ -8,9 +8,15 @@ import SearchBar from "@/components/SearchBar";
 import SegmentGroup from "@/components/SegmentGroup";
 import ToggleGroup from "@/components/ToggleGroup";
 
+import dynamic from "next/dynamic";
+
 import BannerCard from "../guidebook/_domain/components/BannerCard";
-import GuidebookCreateSheet from "../guidebook/_domain/components/Guidebook/GuidebookCreateSheet";
 import BannerHeart from "../guidebook/_domain/assets/banner-heart.svg";
+
+const GuidebookCreateSheet = dynamic(
+  () => import("./_domain/components/Guidebook/GuidebookCreateSheet"),
+  { ssr: false }
+);
 import BannerStar from "../guidebook/_domain/assets/banner-star.svg";
 import { MOCK_MY_GUIDEBOOKS } from "../guidebook/_domain/mocks/guidebooks";
 

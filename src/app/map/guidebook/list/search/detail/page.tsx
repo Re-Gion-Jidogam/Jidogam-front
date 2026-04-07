@@ -15,10 +15,20 @@ import { PlaceSection } from "./_domain/components/PlaceSection";
 import { MAX_CHALLENGE_COUNT } from "./_domain/constants/guidebookConstants";
 import { useChallengeQuery } from "./_domain/queries/useChallengeQuery";
 import { useGuidebookOwnerQuery } from "./_domain/queries/useGuidebookOwnerQuery";
-import GuidebookCreateSheet from "../../../_domain/components/Guidebook/GuidebookCreateSheet";
 import { createPortal } from "react-dom";
-import ExitConfirmModal from "../../../_domain/components/Modal/ExitConfirmModal";
-import Toast from "@/components/Toast";
+import dynamic from "next/dynamic";
+
+const GuidebookCreateSheet = dynamic(
+  () => import("../../../_domain/components/Guidebook/GuidebookCreateSheet"),
+  { ssr: false }
+);
+
+const ExitConfirmModal = dynamic(
+  () => import("../../../_domain/components/Modal/ExitConfirmModal"),
+  { ssr: false }
+);
+
+const Toast = dynamic(() => import("@/components/Toast"), { ssr: false });
 
 export default function GuidebookDetailPage() {
   const router = useRouter();
