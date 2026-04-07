@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
+import { MouseEvent, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -17,7 +17,7 @@ import { StampModal } from "./StampModal";
 const ONE_MINUTE = 60 * 1_000;
 const WAITING_TIME_AFTER_STAMP = 30 * ONE_MINUTE;
 
-export default function StampBottomSheet() {
+function StampBottomSheetContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -137,5 +137,13 @@ export default function StampBottomSheet() {
         />
       )}
     </BottomSheet>
+  );
+}
+
+export default function StampBottomSheet() {
+  return (
+    <Suspense fallback={null}>
+      <StampBottomSheetContent />
+    </Suspense>
   );
 }

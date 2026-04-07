@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -12,7 +14,7 @@ interface SegmentGroupProps {
   }[];
 }
 
-export default function SegmentGroup({ segments }: SegmentGroupProps) {
+function SegmentGroupContent({ segments }: SegmentGroupProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -55,5 +57,13 @@ export default function SegmentGroup({ segments }: SegmentGroupProps) {
         })}
       </div>
     </div>
+  );
+}
+
+export default function SegmentGroup(props: SegmentGroupProps) {
+  return (
+    <Suspense fallback={null}>
+      <SegmentGroupContent {...props} />
+    </Suspense>
   );
 }

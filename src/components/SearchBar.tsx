@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, InputHTMLAttributes, ReactNode, useRef } from "react";
+import { FormEvent, InputHTMLAttributes, ReactNode, Suspense, useRef } from "react";
 
 import clsx from "clsx";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -14,7 +14,7 @@ interface SearchBarProps
   postfix?: ReactNode;
 }
 
-export default function SearchBar({
+function SearchBarContent({
   className,
   placeholder = "무엇이든 검색해보세요",
   postfix = <SVGIcon icon="CloseIcon" />,
@@ -80,5 +80,13 @@ export default function SearchBar({
         </button>
       )}
     </form>
+  );
+}
+
+export default function SearchBar(props: SearchBarProps) {
+  return (
+    <Suspense fallback={null}>
+      <SearchBarContent {...props} />
+    </Suspense>
   );
 }
