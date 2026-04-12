@@ -29,3 +29,5 @@ export { default as ToggleGroupWhiteLoading } from "./toggle-group-white-loading
 export { default as EyeOpenIcon } from "./eye-open.svg";
 export { default as EyeClosedIcon } from "./eye-closed.svg";
 export { default as GrayThumbUpIcon } from "./gray-thumb-up.svg";
+export { default as LocationIcon } from "./location.svg";
+export { default as MapVoidIcon } from "./map-void.svg";

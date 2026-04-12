@@ -35,15 +35,20 @@ export default function Toast({
       )}
     >
       <div className={clsx("flex items-center gap-5")}>
-        <SVGIcon icon="ToastCheckIcon" />
+        <SVGIcon icon="ToastCheckIcon" className="w-10 h-10 shrink-0" />
         <div
-          className={clsx("flex gap-1", "font-medium text-sm text-gray-900")}
+          className={clsx(
+            "flex gap-1 whitespace-nowrap",
+            "font-medium text-sm text-gray-900",
+          )}
         >
           <p>{truncatedTitle}</p>
           <p>{message}</p>
         </div>
       </div>
-      {type === "MOVE" && <SVGIcon icon="RightGrayArrow" />}
+      {type === "MOVE" && (
+        <SVGIcon icon="RightGrayArrow" className="w-7 h-7 shrink-0" />
+      )}
     </div>
   );
 }
