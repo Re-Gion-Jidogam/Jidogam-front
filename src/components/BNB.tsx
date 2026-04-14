@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -31,7 +33,7 @@ interface BNBProps {
   menus?: MenuItemType[];
 }
 
-export default function BNB({ menus = MENUS }: BNBProps) {
+function BNBContent({ menus = MENUS }: BNBProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -88,6 +90,14 @@ export default function BNB({ menus = MENUS }: BNBProps) {
         );
       })}
     </ul>
+  );
+}
+
+export default function BNB(props: BNBProps) {
+  return (
+    <Suspense fallback={null}>
+      <BNBContent {...props} />
+    </Suspense>
   );
 }
 

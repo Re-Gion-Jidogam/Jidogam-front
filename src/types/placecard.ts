@@ -17,4 +17,5 @@ export type PlaceCardVariant =
 export interface PlaceCardProps extends PlaceCardBase {
   variant?: PlaceCardVariant;
   className?: string;
+  onOptionClick?: () => void;
 }
