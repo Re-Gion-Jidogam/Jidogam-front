@@ -49,6 +49,8 @@ export default function GuidebookCreateSheet({
     handleCardValueChange,
     handleSubmit,
     showToast,
+    errorMessage,
+    isSubmitting,
   } = useGuidebookCreate();
 
   const handleClose = () => {
@@ -64,6 +66,11 @@ export default function GuidebookCreateSheet({
           onClick={() => router.push("/map/guidebook/list/search")}
         >
           <Toast type="MOVE" title="가이드북을 만들었어요!" message="" />
+        </div>
+      )}
+      {errorMessage && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="NOT_MOVE" title={errorMessage} message="" />
         </div>
       )}
       {isExitModalOpen && (
@@ -112,8 +119,12 @@ export default function GuidebookCreateSheet({
           </div>
 
           <div className="shrink-0 px-5 py-3">
-            <Button className="w-full py-4" onClick={handleSubmit}>
-              만들기
+            <Button
+              className="w-full py-4"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "만드는 중..." : "만들기"}
             </Button>
           </div>
         </div>
