@@ -26,14 +26,7 @@ export default function GuidebookFormSection({
     <>
       <section className="py-1">
         <div className="relative inline-flex">
-          <div className="pointer-events-none">
-            <Toggle
-              key={String(isPublished)}
-              label="가이드북 출판"
-              initial={isPublished}
-              disabled={!canPublish}
-            />
-          </div>
+          <div className="pointer-events-none"></div>
           {canPublish && (
             <div
               className="absolute inset-0 cursor-pointer"
