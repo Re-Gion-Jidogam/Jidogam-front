@@ -95,6 +95,12 @@ export function useGuidebookCreate({ onClose }: UseGuidebookCreateOptions = {}) 
   };
 
   useEffect(() => {
+    if (!form.thumbnailUrl?.startsWith("blob:")) return;
+    const url = form.thumbnailUrl;
+    return () => URL.revokeObjectURL(url);
+  }, [form.thumbnailUrl]);
+
+  useEffect(() => {
     if (showToast) {
       const timer = setTimeout(() => setShowToast(false), 3000);
       return () => clearTimeout(timer);
