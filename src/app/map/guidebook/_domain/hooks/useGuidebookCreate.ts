@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
   CardValueType,
   GuidebookCardModifyBackgroundLayerMode,
 } from "@/components/GuidebookCard/GuidebookModifyCard";
 
-const MOCK_LOCATION_COUNT = 5;
-const MIN_PUBLISH_LOCATIONS = 5;
+import { useCreateGuidebook } from "./useCreateGuidebook";
+
 const INITIAL_SLIDER_VALUE = 0;
 
 function sliderValueToColor(value: number): string {
@@ -22,15 +24,27 @@ interface GuidebookCreateForm {
   thumbnailUrl: string | null;
   title: string;
   description: string;
-  isPublished: boolean;
   sliderValue: number;
 }
 
-export function useGuidebookCreate() {
+function normalizeThumbnail(thumbnailUrl: string | null): string | undefined {
+  if (!thumbnailUrl || thumbnailUrl.startsWith("blob:")) {
+    return undefined;
+  }
+
+  return thumbnailUrl;
+}
+
+interface UseGuidebookCreateOptions {
+  onClose?: () => void;
+}
+
+export function useGuidebookCreate({ onClose }: UseGuidebookCreateOptions = {}) {
+  const router = useRouter();
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
-  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [cardMode, setCardMode] =
     useState<GuidebookCardModifyBackgroundLayerMode>("none");
   const [form, setForm] = useState<GuidebookCreateForm>({
@@ -39,11 +53,8 @@ export function useGuidebookCreate() {
     thumbnailUrl: null,
     title: "",
     description: "",
-    isPublished: false,
     sliderValue: INITIAL_SLIDER_VALUE,
   });
-
-  const canPublish = MOCK_LOCATION_COUNT >= MIN_PUBLISH_LOCATIONS;
 
   const handleSliderChange = (sliderValue: number) => {
     setForm((prev) => ({
@@ -59,19 +70,6 @@ export function useGuidebookCreate() {
 
   const handleDescriptionChange = (description: string) => {
     setForm((prev) => ({ ...prev, description }));
-  };
-
-  const handlePublishToggleRequest = () => setIsPublishModalOpen(true);
-
-  const handlePublishConfirm = () => {
-    setForm((prev) => ({ ...prev, isPublished: true }));
-    setIsPublishModalOpen(false);
-  };
-
-  const handlePublishModalClose = () => setIsPublishModalOpen(false);
-
-  const handlePublishOff = () => {
-    setForm((prev) => ({ ...prev, isPublished: false }));
   };
 
   const handleCardValueChange = (cardValue: CardValueType) => {
@@ -103,22 +101,65 @@ export function useGuidebookCreate() {
     }
   }, [showToast]);
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
+  const { mutate: createGuidebook, isPending: isSubmitting } =
+    useCreateGuidebook({
+      onSuccess: () => {
+        setShowToast(true);
+        onClose?.();
+      },
+      onError: (error) => {
+        console.error("가이드북 생성 실패", {
+          kind: error.kind,
+          status: error.status,
+          message: error.message,
+        });
+
+        if (error.kind === "UNAUTHORIZED") {
+          router.push("/account");
+          return;
+        }
+        setErrorMessage(
+          error.kind === "BAD_REQUEST"
+            ? "입력값을 확인해주세요"
+            : error.kind === "FORBIDDEN"
+              ? "이 계정은 가이드북 생성 권한이 없어요"
+            : "가이드북 생성에 실패했어요",
+        );
+      },
+    });
+
   const handleSubmit = () => {
-    console.log("Creating guidebook:", form);
-    setShowToast(true);
+    const title = form.title.trim();
+
+    if (!title) {
+      setErrorMessage("제목을 입력해주세요");
+      return;
+    }
+
+    createGuidebook({
+      title,
+      description: form.description.trim(),
+      emoji: form.emoji ?? undefined,
+      color: form.color ?? undefined,
+      thumbnail: normalizeThumbnail(form.thumbnailUrl),
+    });
   };
 
   const isColorPickerDisabled = form.thumbnailUrl !== null;
 
   return {
     form,
-    canPublish,
-    locationCount: MOCK_LOCATION_COUNT,
     cardMode,
     isColorPickerDisabled,
     isExitModalOpen,
     isActionSheetOpen,
-    isPublishModalOpen,
     handleExitRequest,
     handleExitCancel,
     handleOpenActionSheet,
@@ -128,12 +169,10 @@ export function useGuidebookCreate() {
     handleSliderChange,
     handleTitleChange,
     handleDescriptionChange,
-    handlePublishToggleRequest,
-    handlePublishConfirm,
-    handlePublishModalClose,
-    handlePublishOff,
     handleCardValueChange,
     handleSubmit,
     showToast,
+    errorMessage,
+    isSubmitting,
   };
 }

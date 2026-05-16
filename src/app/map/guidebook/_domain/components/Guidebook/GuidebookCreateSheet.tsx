@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import BottomSheet from "@/components/BottomSheet";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
@@ -10,7 +8,6 @@ import ColorPickerSection from "../ColorPickerSection";
 import ExitConfirmModal from "../Modal/ExitConfirmModal";
 import GuidebookCreateHeader from "./GuidebookCreateHeader";
 import GuidebookFormSection from "./GuidebookFormSection";
-import PublishGuideModal from "../Modal/PublishGuideModal";
 import ThumbnailActionSheet from "../ThumbnailActionSheet";
 import { useGuidebookCreate } from "../../hooks/useGuidebookCreate";
 
@@ -23,16 +20,12 @@ export default function GuidebookCreateSheet({
   isOpen,
   onClose,
 }: GuidebookCreateSheetProps) {
-  const router = useRouter();
-
   const {
     form,
-    canPublish,
     cardMode,
     isColorPickerDisabled,
     isExitModalOpen,
     isActionSheetOpen,
-    isPublishModalOpen,
     handleExitRequest,
     handleExitCancel,
     handleOpenActionSheet,
@@ -42,16 +35,12 @@ export default function GuidebookCreateSheet({
     handleSliderChange,
     handleTitleChange,
     handleDescriptionChange,
-    handlePublishToggleRequest,
-    handlePublishConfirm,
-    handlePublishModalClose,
-    handlePublishOff,
     handleCardValueChange,
     handleSubmit,
     showToast,
     errorMessage,
     isSubmitting,
-  } = useGuidebookCreate();
+  } = useGuidebookCreate({ onClose });
 
   const handleClose = () => {
     handleExitCancel();
@@ -61,10 +50,7 @@ export default function GuidebookCreateSheet({
   return (
     <>
       {showToast && (
-        <div
-          className="fixed top-0 left-0 right-0 z-100 cursor-pointer w-full"
-          onClick={() => router.push("/map/guidebook/list/search")}
-        >
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
           <Toast type="MOVE" title="가이드북을 만들었어요!" message="" />
         </div>
       )}
@@ -75,12 +61,6 @@ export default function GuidebookCreateSheet({
       )}
       {isExitModalOpen && (
         <ExitConfirmModal onCancel={handleExitCancel} onConfirm={handleClose} />
-      )}
-      {isPublishModalOpen && (
-        <PublishGuideModal
-          onConfirm={handlePublishConfirm}
-          onClose={handlePublishModalClose}
-        />
       )}
       {isActionSheetOpen && (
         <ThumbnailActionSheet
@@ -107,12 +87,8 @@ export default function GuidebookCreateSheet({
             />
 
             <GuidebookFormSection
-              isPublished={form.isPublished}
-              canPublish={canPublish}
+              title={form.title}
               description={form.description}
-              onPublishToggle={
-                form.isPublished ? handlePublishOff : handlePublishToggleRequest
-              }
               onTitleChange={handleTitleChange}
               onDescriptionChange={handleDescriptionChange}
             />
