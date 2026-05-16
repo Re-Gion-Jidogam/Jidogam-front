@@ -117,14 +117,9 @@ export default function GuidebookDetailPage() {
             {actionButton}
           </div>
 
-          {isOwner && (
-            <div className="px-5 pb-3">
-              <ProgressBar
-                visitedCount={visitedCount}
-                totalCount={totalCount}
-              />
-            </div>
-          )}
+          <div className="px-5 pb-3">
+            <ProgressBar visitedCount={visitedCount} totalCount={totalCount} />
+          </div>
 
           <ReviewSection />
           <PlaceSection
