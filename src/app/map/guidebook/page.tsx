@@ -15,7 +15,7 @@ import BannerHeart from "../guidebook/_domain/assets/banner-heart.svg";
 
 const GuidebookCreateSheet = dynamic(
   () => import("./_domain/components/Guidebook/GuidebookCreateSheet"),
-  { ssr: false }
+  { ssr: false },
 );
 import BannerStar from "../guidebook/_domain/assets/banner-star.svg";
 import { MOCK_MY_GUIDEBOOKS } from "../guidebook/_domain/mocks/guidebooks";

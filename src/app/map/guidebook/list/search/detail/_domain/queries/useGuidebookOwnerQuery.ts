@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useGuidebookDetailQuery } from "@/app/map/guidebook/_domain/queries/useGuidebookDetailQuery";
+import { useUserStore } from "@/app/map/guidebook/_domain/store/useUserStore";
 
 export interface GuidebookOwnerStatus {
   isOwner: boolean;
@@ -6,16 +7,19 @@ export interface GuidebookOwnerStatus {
   totalCount: number;
 }
 
-// TODO: 실제 API 호출 함수로 교체
-async function fetchGuidebookOwnerStatus(
-  _guidebookId: string,
-): Promise<GuidebookOwnerStatus> {
-  return Promise.resolve({ isOwner: true, visitedCount: 1827, totalCount: 2343 });
-}
+export function useGuidebookOwnerQuery(guidebookId: string | null) {
+  const userId = useUserStore((state) => state.userId);
+  const guidebookDetailQuery = useGuidebookDetailQuery(guidebookId);
+  const guidebook = guidebookDetailQuery.data;
 
-export function useGuidebookOwnerQuery(guidebookId: string) {
-  return useQuery<GuidebookOwnerStatus>({
-    queryKey: ["guidebookOwner", guidebookId],
-    queryFn: () => fetchGuidebookOwnerStatus(guidebookId),
-  });
+  return {
+    ...guidebookDetailQuery,
+    data: guidebook
+      ? {
+          isOwner: userId !== null && guidebook.author.uid === userId,
+          visitedCount: guidebook.visitedPlaceCount,
+          totalCount: guidebook.totalPlaceCount,
+        }
+      : undefined,
+  };
 }
