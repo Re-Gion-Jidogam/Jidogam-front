@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import Button from "@/components/Button";
@@ -12,35 +13,30 @@ import { ProgressBar } from "./_domain/components/ProgressBar";
 import { ReviewSection } from "./_domain/components/ReviewSection";
 import { PlaceSection } from "./_domain/components/PlaceSection";
 
-import { MAX_CHALLENGE_COUNT } from "./_domain/constants/guidebookConstants";
-import { useChallengeQuery } from "./_domain/queries/useChallengeQuery";
+import { useGuidebookDetailQuery } from "@/app/map/guidebook/_domain/queries/useGuidebookDetailQuery";
 import { useGuidebookOwnerQuery } from "./_domain/queries/useGuidebookOwnerQuery";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 
 const GuidebookCreateSheet = dynamic(
   () => import("../../../_domain/components/Guidebook/GuidebookCreateSheet"),
-  { ssr: false }
+  { ssr: false },
 );
 
 const ExitConfirmModal = dynamic(
   () => import("../../../_domain/components/Modal/ExitConfirmModal"),
-  { ssr: false }
+  { ssr: false },
 );
 
 const Toast = dynamic(() => import("@/components/Toast"), { ssr: false });
 
 export default function GuidebookDetailPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const guidebookId = "1";
+  const guidebookId = searchParams.get("guidebookId");
 
-  const { data: challengeData } = useChallengeQuery(guidebookId);
-  const isChallenging = challengeData?.isChallenging ?? false;
-  const isMaxChallenges =
-    !isChallenging &&
-    (challengeData?.challengeCount ?? 0) >= MAX_CHALLENGE_COUNT;
-
+  const { data: guidebook } = useGuidebookDetailQuery(guidebookId);
   const { data: ownerData } = useGuidebookOwnerQuery(guidebookId);
   const isOwner = ownerData?.isOwner ?? false;
   const visitedCount = ownerData?.visitedCount ?? 0;
@@ -107,18 +103,17 @@ export default function GuidebookDetailPage() {
         <div className="flex-1 min-h-0 overflow-y-auto pt-4">
           <div className="px-5 pt-2 pb-4">
             <h1 className="text-2xl font-bold text-gray-900">
-              전국 빵집 리스트
+              {guidebook?.title ?? ""}
             </h1>
             <p className="text-sm text-gray-600 mt-1">
-              Lv. 3132 · 지나가던 사람
+              {guidebook
+                ? `Lv. ${guidebook.author.level} · ${guidebook.author.nickname}`
+                : ""}
             </p>
           </div>
 
           <div className="flex gap-3 px-5 pb-5">
-            <ChallengeButton
-              isChallenging={isChallenging}
-              isMaxChallenges={isMaxChallenges}
-            />
+            <ChallengeButton guidebookId={guidebookId} />
             {actionButton}
           </div>
 
