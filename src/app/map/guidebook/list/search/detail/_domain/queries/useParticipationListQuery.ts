@@ -5,8 +5,8 @@ import { shouldRetry } from "@/apis/retry";
 import {
   participationApi,
   type ParticipationFilter,
-} from "../api/challenge.api";
-import { challengeQueryKey } from "./challenge.query-key";
+} from "../api/participation.api";
+import { participationQueryKey } from "./participation.query-key";
 
 const PARTICIPATION_PAGE_SIZE = 100;
 
@@ -16,8 +16,8 @@ export function useParticipationListQuery(
 ) {
   return useQuery({
     queryKey: userId
-      ? challengeQueryKey.participation(userId, filter)
-      : challengeQueryKey.participations(),
+      ? participationQueryKey.list(userId, filter)
+      : participationQueryKey.lists(),
     queryFn: () =>
       participationApi.list(userId as string, {
         filter,

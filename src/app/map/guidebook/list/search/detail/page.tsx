@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import ActionSheet from "@/components/ActionSheet";
 import SVGIcon from "@/components/SVGIcon";
 
-import { ChallengeButton } from "./_domain/components/ChallengeButton";
+import { ParticipationButton } from "./_domain/components/ParticipationButton";
 import { ProgressBar } from "./_domain/components/ProgressBar";
 import { ReviewSection } from "./_domain/components/ReviewSection";
 import { PlaceSection } from "./_domain/components/PlaceSection";
@@ -113,7 +113,7 @@ export default function GuidebookDetailPage() {
           </div>
 
           <div className="flex gap-3 px-5 pb-5">
-            <ChallengeButton guidebookId={guidebookId} />
+            <ParticipationButton guidebookId={guidebookId} />
             {actionButton}
           </div>
 

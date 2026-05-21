@@ -49,9 +49,7 @@ export const participationApi = {
     apiClient.get<ParticipationListResponse>(
       `/api/users/${userId}/participations${buildQueryString(params)}`,
     ),
-};
 
-export const challengeApi = {
   start: (guidebookId: string) =>
     apiClient.post<void>(`/api/guidebooks/${guidebookId}/participants`),
 

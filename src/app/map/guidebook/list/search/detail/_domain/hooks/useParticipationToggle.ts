@@ -7,10 +7,10 @@ import { ApiError } from "@/apis/client";
 import { shouldRetry } from "@/apis/retry";
 import { useUserStore } from "@/app/map/guidebook/_domain/store/useUserStore";
 
-import { challengeApi } from "../api/challenge.api";
-import { challengeQueryKey } from "../queries/challenge.query-key";
+import { participationApi } from "../api/participation.api";
+import { participationQueryKey } from "../queries/participation.query-key";
 
-export type ChallengeMutationErrorKind =
+export type ParticipationMutationErrorKind =
   | "BAD_REQUEST"
   | "UNAUTHORIZED"
   | "FORBIDDEN"
@@ -19,51 +19,51 @@ export type ChallengeMutationErrorKind =
   | "SERVER_ERROR"
   | "UNKNOWN";
 
-export class ChallengeMutationError extends Error {
-  readonly kind: ChallengeMutationErrorKind;
+export class ParticipationMutationError extends Error {
+  readonly kind: ParticipationMutationErrorKind;
   readonly status?: number;
 
   constructor(
-    kind: ChallengeMutationErrorKind,
+    kind: ParticipationMutationErrorKind,
     status?: number,
     message?: string,
   ) {
     super(message ?? kind);
-    this.name = "ChallengeMutationError";
+    this.name = "ParticipationMutationError";
     this.kind = kind;
     this.status = status;
   }
 }
 
-function toDomainError(error: unknown): ChallengeMutationError {
+function toDomainError(error: unknown): ParticipationMutationError {
   const message = error instanceof Error ? error.message : "";
   const status = error instanceof ApiError ? error.status : undefined;
 
   if (status === 400)
-    return new ChallengeMutationError("BAD_REQUEST", 400, message);
+    return new ParticipationMutationError("BAD_REQUEST", 400, message);
   if (status === 401)
-    return new ChallengeMutationError("UNAUTHORIZED", 401, message);
+    return new ParticipationMutationError("UNAUTHORIZED", 401, message);
   if (status === 403)
-    return new ChallengeMutationError("FORBIDDEN", 403, message);
+    return new ParticipationMutationError("FORBIDDEN", 403, message);
   if (status === 404)
-    return new ChallengeMutationError("NOT_FOUND", 404, message);
+    return new ParticipationMutationError("NOT_FOUND", 404, message);
   if (status === 409)
-    return new ChallengeMutationError("ALREADY_PARTICIPATING", 409, message);
+    return new ParticipationMutationError("ALREADY_PARTICIPATING", 409, message);
   if (status && status >= 500)
-    return new ChallengeMutationError("SERVER_ERROR", status, message);
-  return new ChallengeMutationError("UNKNOWN", status, message);
+    return new ParticipationMutationError("SERVER_ERROR", status, message);
+  return new ParticipationMutationError("UNKNOWN", status, message);
 }
 
 type ToggleAction = "start" | "cancel";
 
-interface UseChallengeToggleOptions {
+interface UseParticipationToggleOptions {
   onSuccess?: (action: ToggleAction) => void;
-  onError?: (error: ChallengeMutationError, action: ToggleAction) => void;
+  onError?: (error: ParticipationMutationError, action: ToggleAction) => void;
 }
 
-export function useChallengeToggle(
+export function useParticipationToggle(
   guidebookId: string | null,
-  options?: UseChallengeToggleOptions,
+  options?: UseParticipationToggleOptions,
 ) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -72,30 +72,30 @@ export function useChallengeToggle(
   async function invalidateParticipations() {
     if (userId) {
       await queryClient.invalidateQueries({
-        queryKey: challengeQueryKey.participation(userId, "progress"),
+        queryKey: participationQueryKey.list(userId, "progress"),
       });
       return;
     }
 
     await queryClient.invalidateQueries({
-      queryKey: challengeQueryKey.participations(),
+      queryKey: participationQueryKey.lists(),
     });
   }
 
-  function handleError(error: ChallengeMutationError, action: ToggleAction) {
+  function handleError(error: ParticipationMutationError, action: ToggleAction) {
     if (error.kind === "UNAUTHORIZED") {
       router.push("/account");
     }
     options?.onError?.(error, action);
   }
 
-  const startMutation = useMutation<void, ChallengeMutationError, void>({
-    mutationKey: ["challenge", "start", guidebookId],
+  const startMutation = useMutation<void, ParticipationMutationError, void>({
+    mutationKey: ["participation", "start", guidebookId],
     mutationFn: async () => {
       if (!guidebookId) return;
 
       try {
-        await challengeApi.start(guidebookId);
+        await participationApi.start(guidebookId);
       } catch (error) {
         throw toDomainError(error);
       }
@@ -113,13 +113,13 @@ export function useChallengeToggle(
     retry: shouldRetry,
   });
 
-  const cancelMutation = useMutation<void, ChallengeMutationError, void>({
-    mutationKey: ["challenge", "cancel", guidebookId],
+  const cancelMutation = useMutation<void, ParticipationMutationError, void>({
+    mutationKey: ["participation", "cancel", guidebookId],
     mutationFn: async () => {
       if (!guidebookId) return;
 
       try {
-        await challengeApi.cancel(guidebookId);
+        await participationApi.cancel(guidebookId);
       } catch (error) {
         throw toDomainError(error);
       }
