@@ -1,5 +1,5 @@
 import { apiClient } from "@/apis/client";
-import { Guidebook } from "@/types/guidebook";
+import type { Guidebook } from "@/types/guidebook";
 
 export interface GuidebookCreateRequest {
   title: string;
@@ -7,6 +7,15 @@ export interface GuidebookCreateRequest {
   emoji?: string;
   color?: string;
   thumbnail?: string;
+}
+
+export interface GuidebookUpdateRequest {
+  title?: string;
+  description?: string;
+  emoji?: string;
+  color?: string;
+  thumbnail?: string;
+  isPublish?: boolean;
 }
 
 export type GuidebookListFilter = "popular" | "local" | "isPublished";
@@ -92,4 +101,13 @@ export const guidebookApi = {
     apiClient.get<GuidebookPlacesResponse>(
       `${GUIDEBOOKS_ENDPOINT}/${guidebookId}/places${buildQueryString(params)}`,
     ),
+
+  update: (guidebookId: string, body: GuidebookUpdateRequest) =>
+    apiClient.patch<Guidebook>(`${GUIDEBOOKS_ENDPOINT}/${guidebookId}`, body),
+
+  delete: (guidebookId: string) =>
+    apiClient.delete<void>(`${GUIDEBOOKS_ENDPOINT}/${guidebookId}`),
+
+  removePlace: (guidebookId: string, placeId: string) =>
+    apiClient.delete<void>(`${GUIDEBOOKS_ENDPOINT}/${guidebookId}/places/${placeId}`),
 };

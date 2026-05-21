@@ -90,6 +90,9 @@ export const apiClient = {
   put: <T>(endpoint: string, body?: unknown, options?: RequestOptions) =>
     request<T>(endpoint, { method: "PUT", body, ...options }),
 
+  patch: <T>(endpoint: string, body?: unknown, options?: RequestOptions) =>
+    request<T>(endpoint, { method: "PATCH", body, ...options }),
+
   delete: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { method: "DELETE", ...options }),
 };
