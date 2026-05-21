@@ -123,6 +123,7 @@ export default function GuidebookDetailPage() {
 
           <ReviewSection />
           <PlaceSection
+            guidebookId={guidebookId}
             isAuthor={isAuthor}
             totalPlaceCount={totalCount}
             onEdit={handlePlaceEdit}
