@@ -12,12 +12,12 @@ import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStor
 import { GUIDEBOOK_COUNT, PLACE_COUNT } from "../constants/guidebookConstants";
 
 interface PlaceSectionProps {
-  isOwner: boolean;
+  isAuthor: boolean;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
+export function PlaceSection({ isAuthor, onEdit, onDelete }: PlaceSectionProps) {
   const router = useRouter();
   const { showVisited, showUnvisited, toggleVisited, toggleUnvisited } =
     useSearchFilterStore();
@@ -111,7 +111,7 @@ export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
               variant="bottom-button"
               className="w-full! bg-white"
               onOptionClick={
-                isOwner ? () => handleOptionClick(place.pid) : undefined
+                isAuthor ? () => handleOptionClick(place.pid) : undefined
               }
             />
           </div>

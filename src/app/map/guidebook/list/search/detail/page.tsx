@@ -14,7 +14,7 @@ import { ReviewSection } from "./_domain/components/ReviewSection";
 import { PlaceSection } from "./_domain/components/PlaceSection";
 
 import { useGuidebookDetailQuery } from "@/app/map/guidebook/_domain/queries/useGuidebookDetailQuery";
-import { useGuidebookOwnerQuery } from "./_domain/queries/useGuidebookOwnerQuery";
+import { useViewerStatusQuery } from "./_domain/queries/useViewerStatusQuery";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 
@@ -37,10 +37,10 @@ export default function GuidebookDetailPage() {
   const guidebookId = searchParams.get("guidebookId");
 
   const { data: guidebook } = useGuidebookDetailQuery(guidebookId);
-  const { data: ownerData } = useGuidebookOwnerQuery(guidebookId);
-  const isOwner = ownerData?.isOwner ?? false;
-  const visitedCount = ownerData?.visitedCount ?? 0;
-  const totalCount = ownerData?.totalCount ?? 0;
+  const { data: viewerStatus } = useViewerStatusQuery(guidebookId);
+  const isAuthor = viewerStatus?.isAuthor ?? false;
+  const visitedCount = viewerStatus?.visitedCount ?? 0;
+  const totalCount = viewerStatus?.totalCount ?? 0;
 
   const [isActionSheetOpen, setIsActionSheetOpen] = useState<boolean>(false);
   const [isGuidebookCreateSheetOpen, setIsGuidebookCreateSheetOpen] =
@@ -64,7 +64,7 @@ export default function GuidebookDetailPage() {
     setIsPlaceDeleteModalOpen(true);
   }
 
-  const actionButton = isOwner ? (
+  const actionButton = isAuthor ? (
     <Button
       color="green"
       variants="primary"
@@ -123,7 +123,7 @@ export default function GuidebookDetailPage() {
 
           <ReviewSection />
           <PlaceSection
-            isOwner={isOwner}
+            isAuthor={isAuthor}
             onEdit={handlePlaceEdit}
             onDelete={handlePlaceDelete}
           />
