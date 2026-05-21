@@ -14,15 +14,26 @@ import { useGuidebookCreate } from "../../hooks/useGuidebookCreate";
 interface GuidebookCreateSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  guidebookId?: string;
+  initialValues?: {
+    title?: string;
+    description?: string;
+    emoji?: string | null;
+    color?: string | null;
+    thumbnailUrl?: string | null;
+  };
 }
 
 export default function GuidebookCreateSheet({
   isOpen,
   onClose,
+  guidebookId,
+  initialValues,
 }: GuidebookCreateSheetProps) {
   const {
     form,
     cardMode,
+    isEditing,
     isColorPickerDisabled,
     isExitModalOpen,
     isActionSheetOpen,
@@ -40,7 +51,7 @@ export default function GuidebookCreateSheet({
     showToast,
     errorMessage,
     isSubmitting,
-  } = useGuidebookCreate({ onClose });
+  } = useGuidebookCreate({ onClose, guidebookId, initialValues });
 
   const handleClose = () => {
     handleExitCancel();
@@ -51,7 +62,11 @@ export default function GuidebookCreateSheet({
     <>
       {showToast && (
         <div className="fixed top-0 left-0 right-0 z-100 w-full">
-          <Toast type="MOVE" title="가이드북을 만들었어요!" message="" />
+          <Toast
+            type="MOVE"
+            title={isEditing ? "가이드북을 수정했어요" : "가이드북을 만들었어요!"}
+            message=""
+          />
         </div>
       )}
       {errorMessage && (
@@ -71,7 +86,10 @@ export default function GuidebookCreateSheet({
       )}
       <BottomSheet isOpen={isOpen} onClose={handleExitRequest} snapPoint="95vh">
         <div className="flex flex-col h-full overflow-hidden">
-          <GuidebookCreateHeader onBack={handleExitRequest} />
+          <GuidebookCreateHeader
+            title={isEditing ? "가이드북 수정" : "가이드북 만들기"}
+            onBack={handleExitRequest}
+          />
 
           <div className="flex-1 overflow-y-auto px-5 pb-4 space-y-5 min-h-0">
             <ColorPickerSection
@@ -100,7 +118,9 @@ export default function GuidebookCreateSheet({
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "만드는 중..." : "만들기"}
+              {isSubmitting
+                ? isEditing ? "수정 중..." : "만드는 중..."
+                : isEditing ? "수정하기" : "만들기"}
             </Button>
           </div>
         </div>

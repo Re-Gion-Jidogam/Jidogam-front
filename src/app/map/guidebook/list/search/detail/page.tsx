@@ -15,6 +15,7 @@ import { PlaceSection } from "./_domain/components/PlaceSection";
 
 import { useGuidebookDetailQuery } from "@/app/map/guidebook/_domain/queries/useGuidebookDetailQuery";
 import { useViewerStatusQuery } from "./_domain/queries/useViewerStatusQuery";
+import { useDeleteGuidebook } from "@/app/map/guidebook/_domain/hooks/useDeleteGuidebook";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 
@@ -45,24 +46,21 @@ export default function GuidebookDetailPage() {
   const [isActionSheetOpen, setIsActionSheetOpen] = useState<boolean>(false);
   const [isGuidebookCreateSheetOpen, setIsGuidebookCreateSheetOpen] =
     useState<boolean>(false);
-
   const [isExitModalOpen, setIsExitModalOpen] = useState<boolean>(false);
   const [showToast, setIsShowToast] = useState<boolean>(false);
 
-  const [isPlaceEditSheetOpen, setIsPlaceEditSheetOpen] =
-    useState<boolean>(false);
-  const [isPlaceDeleteModalOpen, setIsPlaceDeleteModalOpen] =
-    useState<boolean>(false);
-  const [showPlaceDeleteToast, setShowPlaceDeleteToast] =
-    useState<boolean>(false);
-
-  function handlePlaceEdit() {
-    setIsPlaceEditSheetOpen(true);
-  }
-
-  function handlePlaceDelete() {
-    setIsPlaceDeleteModalOpen(true);
-  }
+  const { mutate: deleteGuidebook } = useDeleteGuidebook({
+    onSuccess: () => {
+      setIsExitModalOpen(false);
+      setIsActionSheetOpen(false);
+      setIsShowToast(true);
+      setTimeout(() => setIsShowToast(false), 2000);
+    },
+    onError: () => {
+      setIsExitModalOpen(false);
+      setIsActionSheetOpen(false);
+    },
+  });
 
   const actionButton = isAuthor ? (
     <Button
@@ -86,7 +84,7 @@ export default function GuidebookDetailPage() {
           className="fixed top-0 left-0 right-0 z-100 cursor-pointer w-full"
           onClick={() => router.push("/map/guidebook/list/search/")}
         >
-          <Toast type="MOVE" title="장소를 삭제했어요" message="" />
+          <Toast type="MOVE" title="가이드북을 삭제했어요" message="" />
         </div>
       )}
       <div className="fixed bottom-0 z-1 left-0 right-0 h-[62vh] flex flex-col bg-[#F5F5F5]/80 rounded-t-2xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.1)]">
@@ -126,8 +124,6 @@ export default function GuidebookDetailPage() {
             guidebookId={guidebookId}
             isAuthor={isAuthor}
             totalPlaceCount={totalCount}
-            onEdit={handlePlaceEdit}
-            onDelete={handlePlaceDelete}
           />
         </div>
       </div>
@@ -172,9 +168,19 @@ export default function GuidebookDetailPage() {
         )}
       <GuidebookCreateSheet
         isOpen={isGuidebookCreateSheetOpen}
-        onClose={() => {
-          setIsGuidebookCreateSheetOpen(false);
-        }}
+        onClose={() => setIsGuidebookCreateSheetOpen(false)}
+        guidebookId={guidebookId ?? undefined}
+        initialValues={
+          guidebook
+            ? {
+                title: guidebook.title,
+                description: guidebook.description,
+                emoji: guidebook.emoji,
+                color: guidebook.color,
+                thumbnailUrl: guidebook.thumbnailUrl,
+              }
+            : undefined
+        }
       />
       {isExitModalOpen && (
         <ExitConfirmModal
@@ -183,33 +189,9 @@ export default function GuidebookDetailPage() {
             setIsActionSheetOpen(false);
           }}
           onConfirm={() => {
-            setIsExitModalOpen(false);
-            setIsActionSheetOpen(false);
-            setIsShowToast(true);
-            setTimeout(() => {
-              setIsShowToast(false);
-            }, 2000);
+            if (guidebookId) deleteGuidebook(guidebookId);
           }}
         />
-      )}
-      <GuidebookCreateSheet
-        isOpen={isPlaceEditSheetOpen}
-        onClose={() => setIsPlaceEditSheetOpen(false)}
-      />
-      {isPlaceDeleteModalOpen && (
-        <ExitConfirmModal
-          onCancel={() => setIsPlaceDeleteModalOpen(false)}
-          onConfirm={() => {
-            setIsPlaceDeleteModalOpen(false);
-            setShowPlaceDeleteToast(true);
-            setTimeout(() => {
-              setShowPlaceDeleteToast(false);
-            }, 2000);
-          }}
-        />
-      )}
-      {showPlaceDeleteToast && (
-        <Toast type="MOVE" title="장소를 삭제했어요" message="" />
       )}
     </>
   );

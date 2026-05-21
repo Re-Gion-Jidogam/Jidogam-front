@@ -11,13 +11,12 @@ import Toast from "@/components/Toast";
 import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStore";
 import type { GuidebookPlaceFilter } from "@/app/map/guidebook/_domain/api/guidebook.api";
 import { useGuidebookPlacesQuery } from "../queries/useGuidebookPlacesQuery";
+import { useRemovePlaceMutation } from "../hooks/useRemovePlaceMutation";
 
 interface PlaceSectionProps {
   guidebookId: string | null;
   isAuthor: boolean;
   totalPlaceCount: number;
-  onEdit: () => void;
-  onDelete: () => void;
 }
 
 function deriveFilter(
@@ -42,8 +41,6 @@ export function PlaceSection({
   guidebookId,
   isAuthor,
   totalPlaceCount,
-  onEdit,
-  onDelete,
 }: PlaceSectionProps) {
   const router = useRouter();
   const { showVisited, showUnvisited, toggleVisited, toggleUnvisited } =
@@ -63,7 +60,14 @@ export function PlaceSection({
 
   const [selectedPid, setSelectedPid] = useState<string | null>(null);
   const [errorToast, setErrorToast] = useState(false);
+  const [deleteToast, setDeleteToast] = useState<"success" | "error" | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const { mutate: removePlace } = useRemovePlaceMutation({
+    guidebookId: guidebookId ?? "",
+    onSuccess: () => setDeleteToast("success"),
+    onError: () => setDeleteToast("error"),
+  });
 
   useEffect(() => {
     if (!isError) return;
@@ -71,6 +75,12 @@ export function PlaceSection({
     const timer = setTimeout(() => setErrorToast(false), 3000);
     return () => clearTimeout(timer);
   }, [isError]);
+
+  useEffect(() => {
+    if (!deleteToast) return;
+    const timer = setTimeout(() => setDeleteToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, [deleteToast]);
 
   useEffect(() => {
     const target = loadMoreRef.current;
@@ -94,13 +104,8 @@ export function PlaceSection({
     setSelectedPid(pid);
   }
 
-  function handleEditClick() {
-    onEdit();
-    setSelectedPid(null);
-  }
-
   function handleDeleteClick() {
-    onDelete();
+    if (selectedPid) removePlace(selectedPid);
     setSelectedPid(null);
   }
 
@@ -113,6 +118,16 @@ export function PlaceSection({
       {errorToast && (
         <div className="fixed top-0 left-0 right-0 z-100 w-full">
           <Toast type="NOT_MOVE" title="장소를 불러오지 못했어요" message="" />
+        </div>
+      )}
+      {deleteToast === "success" && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="MOVE" title="장소를 삭제했어요" message="" />
+        </div>
+      )}
+      {deleteToast === "error" && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="NOT_MOVE" title="장소 삭제에 실패했어요" message="" />
         </div>
       )}
 
@@ -187,14 +202,9 @@ export function PlaceSection({
           actionSheetTitle="장소 관리"
           onClickBackdrop={handleCloseActionSheet}
           body={
-            <>
-              <ActionSheet.Button onClick={handleEditClick}>
-                편집하기
-              </ActionSheet.Button>
-              <ActionSheet.Button onClick={handleDeleteClick}>
-                삭제
-              </ActionSheet.Button>
-            </>
+            <ActionSheet.Button onClick={handleDeleteClick}>
+              삭제
+            </ActionSheet.Button>
           }
           footer={
             <ActionSheet.Button onClick={handleCloseActionSheet}>
