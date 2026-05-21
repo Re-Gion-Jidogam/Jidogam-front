@@ -30,6 +30,40 @@ export interface CursorPageResponse<T> {
 
 export type GuidebookListResponse = CursorPageResponse<Guidebook>;
 
+export type GuidebookPlaceFilter = "visited" | "notVisited";
+
+export interface GuidebookPlacesParams {
+  filter?: GuidebookPlaceFilter;
+  cursor?: string;
+  size?: number;
+  userLat?: number;
+  userLon?: number;
+}
+
+export interface GuidebookPlace {
+  pid: string;
+  name: string;
+  address: string;
+  y: number;
+  x: number;
+  visitedDate: string | null;
+  guidebookCount: number;
+  stampCount: number;
+  category: string;
+  distanceInKm: number | null;
+  points: number;
+}
+
+export interface GuidebookPlacesResponse {
+  data: GuidebookPlace[];
+  nextCursor: string | null;
+  size: number;
+  hasNext: boolean;
+  sortBy: string;
+  sortDirection: "asc" | "desc";
+  totalCount: number;
+}
+
 const GUIDEBOOKS_ENDPOINT = "/api/guidebooks";
 
 function buildQueryString(params: object) {
@@ -53,4 +87,9 @@ export const guidebookApi = {
 
   detail: (guidebookId: string) =>
     apiClient.get<Guidebook>(`${GUIDEBOOKS_ENDPOINT}/${guidebookId}`),
+
+  places: (guidebookId: string, params: GuidebookPlacesParams = {}) =>
+    apiClient.get<GuidebookPlacesResponse>(
+      `${GUIDEBOOKS_ENDPOINT}/${guidebookId}/places${buildQueryString(params)}`,
+    ),
 };

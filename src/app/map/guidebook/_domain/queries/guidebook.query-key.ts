@@ -1,4 +1,7 @@
-import type { GuidebookListParams } from "../api/guidebook.api";
+import type {
+  GuidebookListParams,
+  GuidebookPlaceFilter,
+} from "../api/guidebook.api";
 
 export type GuidebookListFilters = Omit<GuidebookListParams, "cursor">;
 
@@ -29,4 +32,11 @@ export const guidebookQueryKey = {
   details: () => [...guidebookQueryKey.all(), "detail"] as const,
   detail: (guidebookId: string) =>
     [...guidebookQueryKey.details(), guidebookId] as const,
+
+  places: (guidebookId: string, filter?: GuidebookPlaceFilter) =>
+    [
+      ...guidebookQueryKey.detail(guidebookId),
+      "places",
+      filter ?? "all",
+    ] as const,
 };
