@@ -124,6 +124,7 @@ export default function GuidebookDetailPage() {
           <ReviewSection />
           <PlaceSection
             isAuthor={isAuthor}
+            totalPlaceCount={totalCount}
             onEdit={handlePlaceEdit}
             onDelete={handlePlaceDelete}
           />

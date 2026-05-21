@@ -9,15 +9,21 @@ import PlaceCard from "@/components/PlaceCard";
 
 import { dummyPlaces } from "../../../_domain/mocks/dummyPlaces";
 import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStore";
-import { GUIDEBOOK_COUNT, PLACE_COUNT } from "../constants/guidebookConstants";
+import { GUIDEBOOK_COUNT } from "../constants/guidebookConstants";
 
 interface PlaceSectionProps {
   isAuthor: boolean;
+  totalPlaceCount: number;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-export function PlaceSection({ isAuthor, onEdit, onDelete }: PlaceSectionProps) {
+export function PlaceSection({
+  isAuthor,
+  totalPlaceCount,
+  onEdit,
+  onDelete,
+}: PlaceSectionProps) {
   const router = useRouter();
   const { showVisited, showUnvisited, toggleVisited, toggleUnvisited } =
     useSearchFilterStore();
@@ -60,7 +66,7 @@ export function PlaceSection({ isAuthor, onEdit, onDelete }: PlaceSectionProps) 
   return (
     <div className="pb-5">
       <p className="px-5 mb-3 text-sm font-semibold text-gray-900">
-        {PLACE_COUNT}개의 장소
+        {totalPlaceCount.toLocaleString()}개의 장소
       </p>
 
       <div className="flex gap-2 px-5 mb-3">
