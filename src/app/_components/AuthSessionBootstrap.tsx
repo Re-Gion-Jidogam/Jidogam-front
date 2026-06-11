@@ -6,7 +6,7 @@ import {
   getAccessToken,
   getUserIdFromAccessToken,
 } from "@/apis/auth-token";
-import { useUserStore } from "@/app/map/guidebook/_domain/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function AuthSessionBootstrap() {
   const setUserId = useUserStore((state) => state.setUserId);

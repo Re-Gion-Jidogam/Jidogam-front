@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ApiError } from "@/apis/client";
 import { shouldRetry } from "@/apis/retry";
-import { useUserStore } from "@/app/map/guidebook/_domain/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
+import { DomainError, mapApiError } from "@/app/map/guidebook/_domain/errors/domainError";
 
 import { participationApi } from "../api/participation.api";
 import { participationQueryKey } from "../queries/participation.query-key";
@@ -19,39 +19,22 @@ export type ParticipationMutationErrorKind =
   | "SERVER_ERROR"
   | "UNKNOWN";
 
-export class ParticipationMutationError extends Error {
-  readonly kind: ParticipationMutationErrorKind;
-  readonly status?: number;
-
-  constructor(
-    kind: ParticipationMutationErrorKind,
-    status?: number,
-    message?: string,
-  ) {
-    super(message ?? kind);
-    this.name = "ParticipationMutationError";
-    this.kind = kind;
-    this.status = status;
-  }
-}
+export type ParticipationMutationError = DomainError<ParticipationMutationErrorKind>;
 
 function toDomainError(error: unknown): ParticipationMutationError {
-  const message = error instanceof Error ? error.message : "";
-  const status = error instanceof ApiError ? error.status : undefined;
-
-  if (status === 400)
-    return new ParticipationMutationError("BAD_REQUEST", 400, message);
-  if (status === 401)
-    return new ParticipationMutationError("UNAUTHORIZED", 401, message);
-  if (status === 403)
-    return new ParticipationMutationError("FORBIDDEN", 403, message);
-  if (status === 404)
-    return new ParticipationMutationError("NOT_FOUND", 404, message);
-  if (status === 409)
-    return new ParticipationMutationError("ALREADY_PARTICIPATING", 409, message);
-  if (status && status >= 500)
-    return new ParticipationMutationError("SERVER_ERROR", status, message);
-  return new ParticipationMutationError("UNKNOWN", status, message);
+  return mapApiError(
+    error,
+    "ParticipationMutationError",
+    {
+      400: "BAD_REQUEST",
+      401: "UNAUTHORIZED",
+      403: "FORBIDDEN",
+      404: "NOT_FOUND",
+      409: "ALREADY_PARTICIPATING",
+    },
+    "SERVER_ERROR",
+    "UNKNOWN",
+  );
 }
 
 type ToggleAction = "start" | "cancel";

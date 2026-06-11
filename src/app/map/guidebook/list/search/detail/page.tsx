@@ -14,7 +14,7 @@ import { ReviewSection } from "./_domain/components/ReviewSection";
 import { PlaceSection } from "./_domain/components/PlaceSection";
 
 import { useGuidebookDetailQuery } from "@/app/map/guidebook/_domain/queries/useGuidebookDetailQuery";
-import { useViewerStatusQuery } from "./_domain/queries/useViewerStatusQuery";
+import { useUserStore } from "@/store/useUserStore";
 import { useDeleteGuidebook } from "@/app/map/guidebook/_domain/hooks/useDeleteGuidebook";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
@@ -38,16 +38,17 @@ export default function GuidebookDetailPage() {
   const guidebookId = searchParams.get("guidebookId");
 
   const { data: guidebook } = useGuidebookDetailQuery(guidebookId);
-  const { data: viewerStatus } = useViewerStatusQuery(guidebookId);
-  const isAuthor = viewerStatus?.isAuthor ?? false;
-  const visitedCount = viewerStatus?.visitedCount ?? 0;
-  const totalCount = viewerStatus?.totalCount ?? 0;
+  const userId = useUserStore((state) => state.userId);
+  const isAuthor = guidebook ? userId !== null && guidebook.author.uid === userId : false;
+  const visitedCount = guidebook?.visitedPlaceCount ?? 0;
+  const totalCount = guidebook?.totalPlaceCount ?? 0;
 
   const [isActionSheetOpen, setIsActionSheetOpen] = useState<boolean>(false);
   const [isGuidebookCreateSheetOpen, setIsGuidebookCreateSheetOpen] =
     useState<boolean>(false);
   const [isExitModalOpen, setIsExitModalOpen] = useState<boolean>(false);
   const [showToast, setIsShowToast] = useState<boolean>(false);
+  const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
 
   const { mutate: deleteGuidebook } = useDeleteGuidebook({
     onSuccess: () => {
@@ -59,6 +60,8 @@ export default function GuidebookDetailPage() {
     onError: () => {
       setIsExitModalOpen(false);
       setIsActionSheetOpen(false);
+      setShowErrorToast(true);
+      setTimeout(() => setShowErrorToast(false), 2000);
     },
   });
 
@@ -85,6 +88,11 @@ export default function GuidebookDetailPage() {
           onClick={() => router.push("/map/guidebook/list/search/")}
         >
           <Toast type="MOVE" title="가이드북을 삭제했어요" message="" />
+        </div>
+      )}
+      {showErrorToast && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="NOT_MOVE" title="가이드북 삭제에 실패했어요" message="" />
         </div>
       )}
       <div className="fixed bottom-0 z-1 left-0 right-0 h-[62vh] flex flex-col bg-[#F5F5F5]/80 rounded-t-2xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.1)]">
@@ -184,6 +192,10 @@ export default function GuidebookDetailPage() {
       />
       {isExitModalOpen && (
         <ExitConfirmModal
+          title="삭제하기"
+          description="가이드북을 삭제할까요?"
+          warningText="삭제된 내용은 복구할 수 없어요."
+          confirmLabel="삭제"
           onCancel={() => {
             setIsExitModalOpen(false);
             setIsActionSheetOpen(false);

@@ -2,7 +2,8 @@
 
 import Button from "@/components/Button";
 
-import { useParticipationQuery } from "../queries/useParticipationQuery";
+import { useUserStore } from "@/store/useUserStore";
+import { useParticipationListQuery } from "../queries/useParticipationListQuery";
 import { useParticipationToggle } from "../hooks/useParticipationToggle";
 
 interface ParticipationButtonProps {
@@ -10,10 +11,16 @@ interface ParticipationButtonProps {
 }
 
 export function ParticipationButton({ guidebookId }: ParticipationButtonProps) {
-  const { data, isLoading } = useParticipationQuery(guidebookId);
+  const userId = useUserStore((state) => state.userId);
+  const { data: list, isLoading } = useParticipationListQuery(
+    guidebookId ? userId : null,
+    "progress",
+  );
   const { start, cancel, isPending } = useParticipationToggle(guidebookId);
 
-  const isParticipating = data?.isParticipating ?? false;
+  const isParticipating = !!(
+    guidebookId && list?.data.some((item) => item.guidebookResponse.gid === guidebookId)
+  );
   const isBusy = isLoading || isPending;
   const isUnavailable = !guidebookId;
 
