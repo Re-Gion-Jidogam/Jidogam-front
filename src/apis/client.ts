@@ -77,7 +77,8 @@ async function request<T>(
     return undefined as T;
   }
 
-  return response.json();
+  const json = await response.json();
+  return (json && typeof json === "object" && "data" in json ? json.data : json) as T;
 }
 
 export const apiClient = {
