@@ -2,9 +2,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ApiError } from "@/apis/client";
 import { shouldRetry } from "@/apis/retry";
 import { guidebookApi, type GuidebookUpdateRequest } from "../api/guidebook.api";
+import { DomainError, mapApiError } from "../errors/domainError";
 import { guidebookQueryKey } from "../queries/guidebook.query-key";
 import type { Guidebook } from "@/types/guidebook";
 
@@ -16,28 +16,16 @@ export type GuidebookUpdateErrorKind =
   | "SERVER_ERROR"
   | "UNKNOWN";
 
-export class GuidebookUpdateError extends Error {
-  readonly kind: GuidebookUpdateErrorKind;
-  readonly status?: number;
-
-  constructor(kind: GuidebookUpdateErrorKind, status?: number, message?: string) {
-    super(message ?? kind);
-    this.name = "GuidebookUpdateError";
-    this.kind = kind;
-    this.status = status;
-  }
-}
+export type GuidebookUpdateError = DomainError<GuidebookUpdateErrorKind>;
 
 function toDomainError(error: unknown): GuidebookUpdateError {
-  const message = error instanceof Error ? error.message : "";
-  const status = error instanceof ApiError ? error.status : undefined;
-
-  if (status === 400) return new GuidebookUpdateError("BAD_REQUEST", 400, message);
-  if (status === 401) return new GuidebookUpdateError("UNAUTHORIZED", 401, message);
-  if (status === 403) return new GuidebookUpdateError("FORBIDDEN", 403, message);
-  if (status === 404) return new GuidebookUpdateError("NOT_FOUND", 404, message);
-  if (status && status >= 500) return new GuidebookUpdateError("SERVER_ERROR", status, message);
-  return new GuidebookUpdateError("UNKNOWN", status, message);
+  return mapApiError(
+    error,
+    "GuidebookUpdateError",
+    { 400: "BAD_REQUEST", 401: "UNAUTHORIZED", 403: "FORBIDDEN", 404: "NOT_FOUND" },
+    "SERVER_ERROR",
+    "UNKNOWN",
+  );
 }
 
 interface UseUpdateGuidebookOptions {

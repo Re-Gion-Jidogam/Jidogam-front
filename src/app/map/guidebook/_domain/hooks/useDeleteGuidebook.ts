@@ -2,9 +2,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ApiError } from "@/apis/client";
 import { shouldRetry } from "@/apis/retry";
 import { guidebookApi } from "../api/guidebook.api";
+import { DomainError, mapApiError } from "../errors/domainError";
 import { guidebookQueryKey } from "../queries/guidebook.query-key";
 
 export type GuidebookDeleteErrorKind =
@@ -14,27 +14,16 @@ export type GuidebookDeleteErrorKind =
   | "SERVER_ERROR"
   | "UNKNOWN";
 
-export class GuidebookDeleteError extends Error {
-  readonly kind: GuidebookDeleteErrorKind;
-  readonly status?: number;
-
-  constructor(kind: GuidebookDeleteErrorKind, status?: number, message?: string) {
-    super(message ?? kind);
-    this.name = "GuidebookDeleteError";
-    this.kind = kind;
-    this.status = status;
-  }
-}
+export type GuidebookDeleteError = DomainError<GuidebookDeleteErrorKind>;
 
 function toDomainError(error: unknown): GuidebookDeleteError {
-  const message = error instanceof Error ? error.message : "";
-  const status = error instanceof ApiError ? error.status : undefined;
-
-  if (status === 401) return new GuidebookDeleteError("UNAUTHORIZED", 401, message);
-  if (status === 403) return new GuidebookDeleteError("FORBIDDEN", 403, message);
-  if (status === 404) return new GuidebookDeleteError("NOT_FOUND", 404, message);
-  if (status && status >= 500) return new GuidebookDeleteError("SERVER_ERROR", status, message);
-  return new GuidebookDeleteError("UNKNOWN", status, message);
+  return mapApiError(
+    error,
+    "GuidebookDeleteError",
+    { 401: "UNAUTHORIZED", 403: "FORBIDDEN", 404: "NOT_FOUND" },
+    "SERVER_ERROR",
+    "UNKNOWN",
+  );
 }
 
 interface UseDeleteGuidebookOptions {
