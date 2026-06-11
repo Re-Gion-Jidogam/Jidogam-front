@@ -1,5 +1,6 @@
 import { apiClient } from "@/apis/client";
 import type { Guidebook } from "@/types/guidebook";
+import type { PlaceCardBase } from "@/types/placecard";
 
 export interface GuidebookCreateRequest {
   title: string;
@@ -60,7 +61,7 @@ export interface GuidebookPlace {
   stampCount: number;
   category: string;
   distanceInKm: number | null;
-  points: number;
+  exp: number;
 }
 
 export interface GuidebookPlacesResponse {
@@ -71,6 +72,28 @@ export interface GuidebookPlacesResponse {
   sortBy: string;
   sortDirection: "asc" | "desc";
   totalCount: number;
+}
+
+function formatVisitedDate(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}.${mm}.${dd}`;
+}
+
+export function toPlaceCardProps(place: GuidebookPlace): PlaceCardBase {
+  return {
+    pid: place.pid,
+    name: place.name,
+    category: place.category,
+    point: place.exp,
+    address: place.address,
+    visitedDate: formatVisitedDate(place.visitedDate),
+    guidebookCount: place.guidebookCount.toLocaleString(),
+  };
 }
 
 const GUIDEBOOKS_ENDPOINT = "/api/guidebooks";

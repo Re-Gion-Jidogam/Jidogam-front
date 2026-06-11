@@ -10,6 +10,7 @@ import Toast from "@/components/Toast";
 
 import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStore";
 import type { GuidebookPlaceFilter } from "@/app/map/guidebook/_domain/api/guidebook.api";
+import { toPlaceCardProps } from "@/app/map/guidebook/_domain/api/guidebook.api";
 import { useGuidebookPlacesQuery } from "../queries/useGuidebookPlacesQuery";
 import { useRemovePlaceMutation } from "../hooks/useRemovePlaceMutation";
 
@@ -27,15 +28,6 @@ function deriveFilter(
   return showVisited ? "visited" : "notVisited";
 }
 
-function formatVisitedDate(iso: string | null): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}.${mm}.${dd}`;
-}
 
 export function PlaceSection({
   guidebookId,
@@ -178,13 +170,7 @@ export function PlaceSection({
               onKeyDown={(e) => e.key === "Enter" && handlePlaceClick(place.pid)}
             >
               <PlaceCard
-                pid={place.pid}
-                name={place.name}
-                category={place.category}
-                point={place.points}
-                address={place.address}
-                visitedDate={formatVisitedDate(place.visitedDate)}
-                guidebookCount={place.guidebookCount.toLocaleString()}
+                {...toPlaceCardProps(place)}
                 variant="bottom-button"
                 className="w-full! bg-white"
                 onOptionClick={
