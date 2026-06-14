@@ -28,7 +28,7 @@ export default function GuidebookCard({
     color,
     emoji,
     thumbnailUrl,
-    rating,
+    score,
     totalPlaceCount,
     visitedPlaceCount,
   } = guidebook;
@@ -42,7 +42,7 @@ export default function GuidebookCard({
   const headerComponent = {
     rating: (
       <span className="inline-block mx-3.5 mt-3 py-1 px-2.5 bg-gray-0 text-sm text-gray-900 rounded-full w-fit">
-        ★{rating}
+        ★{score}
       </span>
     ),
     stampRate: (
@@ -137,7 +137,7 @@ interface GuidebookCardReadOnlyContentProps {
 function GuidebookCardReadOnlyContent({
   guidebook,
 }: GuidebookCardReadOnlyContentProps) {
-  const { title, rating, author, totalPlaceCount, publishedDate, point } =
+  const { title, score, author, totalPlaceCount, publishedDate, exp } =
     guidebook;
   const { level, nickname } = author;
 
@@ -151,7 +151,7 @@ function GuidebookCardReadOnlyContent({
           <span>{nickname}</span>
         </div>
         <div>
-          <span>★{rating}</span>
+          <span>★{score}</span>
           <span className="px-0.5"> ‧ </span>
           <span>
             총 <strong>{addCommaFormatter(totalPlaceCount)}</strong>개의 장소
@@ -163,7 +163,7 @@ function GuidebookCardReadOnlyContent({
           </span>
         </div>
         <p>
-          가이드북 완료 시 <strong>{addCommaFormatter(point)}p</strong>
+          가이드북 완료 시 <strong>{addCommaFormatter(exp)}p</strong>
         </p>
       </div>
     </>

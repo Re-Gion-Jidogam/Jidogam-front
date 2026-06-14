@@ -24,10 +24,10 @@ export type Guidebook = {
   publishedDate: string;
   createdAt: string;
   updatedAt: string | null;
-  participantsCount: number;
-  rating: number;
+  participantCount: number;
+  score: number;
   totalPlaceCount: number;
   visitedPlaceCount: number;
-  point: number;
+  exp: number;
   author: Author;
 } & GuidebookThumbnail;

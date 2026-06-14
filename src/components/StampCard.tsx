@@ -1,3 +1,5 @@
+import { MouseEvent } from "react";
+
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -9,22 +11,31 @@ import SVGIcon from "./SVGIcon";
 
 interface StampCardProps {
   placeInfo: PlaceCardBase;
-  variant: "default" | "stamp" | "stamp-disabled" | "none";
+  variant: "default" | "stamp" | "stamp-disabled";
+  onClick?: (e: MouseEvent<HTMLButtonElement>, placeName: string) => void;
 }
 
-export default function StampCard({ placeInfo, variant }: StampCardProps) {
+export default function StampCard({
+  placeInfo,
+  variant,
+  onClick,
+}: StampCardProps) {
   return (
     <div
       className={clsx(
-        "w-full rounded-xl border border-gray-200 p-4 shadow-[2px_2px_10px_0px_rgba(0,0,0,0.02)] bg-gray-0 relative",
-        {
-          "flex items-center justify-between": variant !== "default",
-        },
+        "relative flex items-center justify-between w-full p-4 bg-gray-0",
+        "rounded-xl border border-gray-200",
+        "shadow-[2px_2px_10px_0px_rgba(0,0,0,0.02)] overflow-hidden",
       )}
     >
       <StampCardContent placeInfo={placeInfo} variant={variant} />
       {variant === "default" && (
-        <Image src={TravelStamp} alt="STAMP" priority />
+        <Image
+          className="absolute right-0 scale-[1.25]"
+          src={TravelStamp}
+          alt="STAMP"
+          priority
+        />
       )}
       {variant !== "default" && variant !== "none" && (
         <Button
@@ -32,6 +43,7 @@ export default function StampCard({ placeInfo, variant }: StampCardProps) {
           variants={variant === "stamp" ? "primary" : "ghost"}
           className="flex flex-col items-center justify-center w-14 h-14 border border-white/60 !rounded-lg"
           disabled={variant === "stamp-disabled"}
+          onClick={(e) => onClick?.(e, placeInfo.name)}
         >
           <SVGIcon icon="WhiteStampIcon" />
           <p className="font-semibold text-[10px] text-white">50</p>

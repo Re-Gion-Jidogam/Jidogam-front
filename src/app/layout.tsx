@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 
 import "./globals.css";
 import BNB from "@/components/BNB";
+import StampBottomSheet from "@/components/StampBottomSheet/StampBottomSheet";
+import QueryProvider from "@/queries/QueryProvider";
+import AuthSessionBootstrap from "./_components/AuthSessionBootstrap";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -25,10 +28,14 @@ export default function RootLayout({
       <body className={`${pretendard.variable} font-pretendard`}>
         <div className="w-screen">
           <main className="min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
-            {children}
-            <footer className="fixed bottom-5 left-1/2 -translate-x-1/2">
-              <BNB />
-            </footer>
+            <QueryProvider>
+              <AuthSessionBootstrap />
+              {children}
+              <footer className="fixed bottom-0 left-1/2 -translate-x-1/2">
+                <BNB />
+              </footer>
+              <StampBottomSheet />
+            </QueryProvider>
           </main>
         </div>
       </body>

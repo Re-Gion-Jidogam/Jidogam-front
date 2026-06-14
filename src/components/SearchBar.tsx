@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, InputHTMLAttributes, ReactNode, useRef } from "react";
+import { FormEvent, InputHTMLAttributes, ReactNode, Suspense, useRef } from "react";
 
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 import SVGIcon from "./SVGIcon";
@@ -14,7 +14,7 @@ interface SearchBarProps
   postfix?: ReactNode;
 }
 
-export default function SearchBar({
+function SearchBarContent({
   className,
   placeholder = "무엇이든 검색해보세요",
   postfix = <SVGIcon icon="CloseIcon" />,
@@ -27,6 +27,7 @@ export default function SearchBar({
 }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -34,7 +35,11 @@ export default function SearchBar({
     const value = searchInputRef.current?.value ?? "";
 
     if (searchInputRef.current && 0 < value.trim().length) {
-      router.push(`${pathname}?word=${value}`);
+      const searchWordParams = new URLSearchParams(searchParams);
+      searchWordParams.set("word", value);
+      router.push(`${pathname}?${searchWordParams.toString()}`, {
+        scroll: false,
+      });
       searchInputRef.current.value = "";
     }
   };
@@ -72,5 +77,13 @@ export default function SearchBar({
         </button>
       )}
     </form>
+  );
+}
+
+export default function SearchBar(props: SearchBarProps) {
+  return (
+    <Suspense fallback={null}>
+      <SearchBarContent {...props} />
+    </Suspense>
   );
 }

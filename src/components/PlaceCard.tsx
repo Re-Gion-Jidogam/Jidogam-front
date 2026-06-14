@@ -20,6 +20,9 @@ export default function PlaceCard({
   variant,
   children,
   className,
+  onOptionClick,
+  images,
+  priority,
 }: PlaceCardProps & {
   children?: React.ReactNode;
 }) {
@@ -40,6 +43,9 @@ export default function PlaceCard({
         visitedDate={visitedDate}
         guidebookCount={guidebookCount}
         variant={variant}
+        onOptionClick={onOptionClick}
+        images={images}
+        priority={priority}
       />
 
       {variant === "bottom-button" && (
@@ -57,7 +63,12 @@ function PlaceCardContent({
   visitedDate,
   guidebookCount,
   variant,
+  onOptionClick,
+  images,
+  priority,
 }: PlaceCardProps) {
+  const imageSources = images ?? [PlaceCardImage01, PlaceCardImage02, PlaceCardImage03];
+
   return (
     <div className="flex flex-col w-fit gap-3.5">
       <div className="flex w-full justify-between">
@@ -134,6 +145,17 @@ function PlaceCardContent({
             )}
           </div>
         </div>
+        {onOptionClick && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onOptionClick();
+            }}
+            className="p-1 text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            ⋮
+          </button>
+        )}
         {variant === "stamp" && (
           <Button
             color="green"
@@ -172,15 +194,18 @@ function PlaceCardContent({
       )}
 
       <div className="flex gap-2">
-        <div className="w-[6.25rem]">
-          <Image src={PlaceCardImage01} alt="sample-image-1" />
-        </div>
-        <div className="w-[6.25rem]">
-          <Image src={PlaceCardImage02} alt="sample-image-2" />
-        </div>
-        <div className="w-[6.25rem]">
-          <Image src={PlaceCardImage03} alt="sample-image-3" />
-        </div>
+        {imageSources.map((src, i) => (
+          <div key={i} className="w-[6.25rem]">
+            <Image
+              src={src}
+              alt={`place-image-${i + 1}`}
+              width={100}
+              height={100}
+              priority={i === 0 ? (priority ?? false) : false}
+              sizes="(max-width: 768px) 100px, 100px"
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
