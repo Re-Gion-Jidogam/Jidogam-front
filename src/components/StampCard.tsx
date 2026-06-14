@@ -37,7 +37,7 @@ export default function StampCard({
           priority
         />
       )}
-      {variant !== "default" && (
+      {variant !== "default" && variant !== "none" && (
         <Button
           color="green"
           variants={variant === "stamp" ? "primary" : "ghost"}

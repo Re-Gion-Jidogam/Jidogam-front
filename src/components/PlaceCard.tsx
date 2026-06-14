@@ -30,7 +30,7 @@ export default function PlaceCard({
     <div
       className={clsx(
         "flex flex-col w-fit gap-3.5 p-4 rounded-xl",
-        "border border-gray-200 shadow-[2px_2px_10px_0px_rgba(0,0,0,0.002)]",
+        "border border-gray-200 shadow-[2px_2px_10px_0px_rgba(0,0,0,0.002)] bg-white",
         className,
       )}
     >
