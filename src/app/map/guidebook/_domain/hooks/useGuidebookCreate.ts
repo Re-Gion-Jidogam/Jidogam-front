@@ -2,19 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
   CardValueType,
   GuidebookCardModifyBackgroundLayerMode,
 } from "@/components/GuidebookCard/GuidebookModifyCard";
 
-const MOCK_LOCATION_COUNT = 5;
-const MIN_PUBLISH_LOCATIONS = 5;
-const INITIAL_SLIDER_VALUE = 0;
+import { sliderValueToColor, colorToSliderValue, INITIAL_SLIDER_VALUE } from "@/utils/color";
 
-function sliderValueToColor(value: number): string {
-  const hue = Math.round(value * 3.3);
-  return `hsl(${hue}, 70%, 65%)`;
-}
+import { useCreateGuidebook } from "./useCreateGuidebook";
+import { useUpdateGuidebook } from "./useUpdateGuidebook";
 
 interface GuidebookCreateForm {
   color: string | null;
@@ -22,28 +20,49 @@ interface GuidebookCreateForm {
   thumbnailUrl: string | null;
   title: string;
   description: string;
-  isPublished: boolean;
   sliderValue: number;
 }
 
-export function useGuidebookCreate() {
+function normalizeThumbnail(thumbnailUrl: string | null): string | undefined {
+  if (!thumbnailUrl || thumbnailUrl.startsWith("blob:")) {
+    return undefined;
+  }
+
+  return thumbnailUrl;
+}
+
+interface InitialValues {
+  title?: string;
+  description?: string;
+  emoji?: string | null;
+  color?: string | null;
+  thumbnailUrl?: string | null;
+}
+
+interface UseGuidebookCreateOptions {
+  onClose?: () => void;
+  guidebookId?: string;
+  initialValues?: InitialValues;
+}
+
+export function useGuidebookCreate({ onClose, guidebookId, initialValues }: UseGuidebookCreateOptions = {}) {
+  const router = useRouter();
+  const isEditing = Boolean(guidebookId);
+
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
-  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [cardMode, setCardMode] =
     useState<GuidebookCardModifyBackgroundLayerMode>("none");
   const [form, setForm] = useState<GuidebookCreateForm>({
-    color: sliderValueToColor(INITIAL_SLIDER_VALUE),
-    emoji: null,
-    thumbnailUrl: null,
-    title: "",
-    description: "",
-    isPublished: false,
-    sliderValue: INITIAL_SLIDER_VALUE,
+    color: initialValues?.color ?? sliderValueToColor(INITIAL_SLIDER_VALUE),
+    emoji: initialValues?.emoji ?? null,
+    thumbnailUrl: initialValues?.thumbnailUrl ?? null,
+    title: initialValues?.title ?? "",
+    description: initialValues?.description ?? "",
+    sliderValue: colorToSliderValue(initialValues?.color ?? null),
   });
-
-  const canPublish = MOCK_LOCATION_COUNT >= MIN_PUBLISH_LOCATIONS;
 
   const handleSliderChange = (sliderValue: number) => {
     setForm((prev) => ({
@@ -59,19 +78,6 @@ export function useGuidebookCreate() {
 
   const handleDescriptionChange = (description: string) => {
     setForm((prev) => ({ ...prev, description }));
-  };
-
-  const handlePublishToggleRequest = () => setIsPublishModalOpen(true);
-
-  const handlePublishConfirm = () => {
-    setForm((prev) => ({ ...prev, isPublished: true }));
-    setIsPublishModalOpen(false);
-  };
-
-  const handlePublishModalClose = () => setIsPublishModalOpen(false);
-
-  const handlePublishOff = () => {
-    setForm((prev) => ({ ...prev, isPublished: false }));
   };
 
   const handleCardValueChange = (cardValue: CardValueType) => {
@@ -97,28 +103,116 @@ export function useGuidebookCreate() {
   };
 
   useEffect(() => {
+    if (!form.thumbnailUrl?.startsWith("blob:")) return;
+    const url = form.thumbnailUrl;
+    return () => URL.revokeObjectURL(url);
+  }, [form.thumbnailUrl]);
+
+  useEffect(() => {
     if (showToast) {
       const timer = setTimeout(() => setShowToast(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [showToast]);
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
+  const { mutate: createGuidebook, isPending: isCreating } =
+    useCreateGuidebook({
+      onSuccess: () => {
+        setShowToast(true);
+        onClose?.();
+      },
+      onError: (error) => {
+        console.error("가이드북 생성 실패", {
+          kind: error.kind,
+          status: error.status,
+          message: error.message,
+        });
+
+        if (error.kind === "UNAUTHORIZED") {
+          router.push("/account");
+          return;
+        }
+        setErrorMessage(
+          error.kind === "BAD_REQUEST"
+            ? "입력값을 확인해주세요"
+            : error.kind === "FORBIDDEN"
+              ? "이 계정은 가이드북 생성 권한이 없어요"
+            : "가이드북 생성에 실패했어요",
+        );
+      },
+    });
+
+  const { mutate: updateGuidebook, isPending: isUpdating } =
+    useUpdateGuidebook({
+      guidebookId: guidebookId ?? "",
+      onSuccess: () => {
+        setShowToast(true);
+        onClose?.();
+      },
+      onError: (error) => {
+        console.error("가이드북 수정 실패", {
+          kind: error.kind,
+          status: error.status,
+          message: error.message,
+        });
+
+        if (error.kind === "UNAUTHORIZED") {
+          router.push("/account");
+          return;
+        }
+        setErrorMessage(
+          error.kind === "BAD_REQUEST"
+            ? "입력값을 확인해주세요"
+            : error.kind === "FORBIDDEN"
+              ? "이 계정은 가이드북 수정 권한이 없어요"
+            : "가이드북 수정에 실패했어요",
+        );
+      },
+    });
+
   const handleSubmit = () => {
-    console.log("Creating guidebook:", form);
-    setShowToast(true);
+    const title = form.title.trim();
+
+    if (!title) {
+      setErrorMessage("제목을 입력해주세요");
+      return;
+    }
+
+    if (isEditing) {
+      updateGuidebook({
+        title,
+        description: form.description.trim(),
+        emoji: form.emoji ?? undefined,
+        color: form.color ?? undefined,
+      });
+    } else {
+      createGuidebook({
+        title,
+        description: form.description.trim(),
+        emoji: form.emoji ?? undefined,
+        color: form.color ?? undefined,
+        thumbnail: normalizeThumbnail(form.thumbnailUrl),
+      });
+    }
   };
 
   const isColorPickerDisabled = form.thumbnailUrl !== null;
+  const isSubmitting = isCreating || isUpdating;
 
   return {
     form,
-    canPublish,
-    locationCount: MOCK_LOCATION_COUNT,
     cardMode,
+    isEditing,
     isColorPickerDisabled,
     isExitModalOpen,
     isActionSheetOpen,
-    isPublishModalOpen,
     handleExitRequest,
     handleExitCancel,
     handleOpenActionSheet,
@@ -128,12 +222,10 @@ export function useGuidebookCreate() {
     handleSliderChange,
     handleTitleChange,
     handleDescriptionChange,
-    handlePublishToggleRequest,
-    handlePublishConfirm,
-    handlePublishModalClose,
-    handlePublishOff,
     handleCardValueChange,
     handleSubmit,
     showToast,
+    errorMessage,
+    isSubmitting,
   };
 }

@@ -5,6 +5,7 @@ import "./globals.css";
 import BNB from "@/components/BNB";
 import StampBottomSheet from "@/components/StampBottomSheet/StampBottomSheet";
 import QueryProvider from "@/queries/QueryProvider";
+import AuthSessionBootstrap from "./_components/AuthSessionBootstrap";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -28,6 +29,7 @@ export default function RootLayout({
         <div className="w-screen">
           <main className="min-h-screen mx-auto p-3 pb-32 bg-gray-50 overflow-hidden">
             <QueryProvider>
+              <AuthSessionBootstrap />
               {children}
               <footer className="fixed bottom-0 left-1/2 -translate-x-1/2">
                 <BNB />

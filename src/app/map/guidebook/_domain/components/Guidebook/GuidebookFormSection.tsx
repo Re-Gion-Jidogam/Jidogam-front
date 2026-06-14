@@ -1,53 +1,29 @@
 "use client";
 
 import TextInput from "@/components/TextInput";
-import Toggle from "@/components/Toggle";
 
 const DESCRIPTION_MAX_LENGTH = 300;
 
 interface GuidebookFormSectionProps {
-  isPublished: boolean;
-  canPublish: boolean;
+  title: string;
   description: string;
-  onPublishToggle: () => void;
   onTitleChange: (title: string) => void;
   onDescriptionChange: (description: string) => void;
 }
 
 export default function GuidebookFormSection({
-  isPublished,
-  canPublish,
+  title,
   description,
-  onPublishToggle,
   onTitleChange,
   onDescriptionChange,
 }: GuidebookFormSectionProps) {
   return (
     <>
-      <section className="py-1">
-        <div className="relative inline-flex">
-          <div className="pointer-events-none">
-            <Toggle
-              key={String(isPublished)}
-              label="가이드북 출판"
-              initial={isPublished}
-              disabled={!canPublish}
-            />
-          </div>
-          {canPublish && (
-            <div
-              className="absolute inset-0 cursor-pointer"
-              onClick={onPublishToggle}
-            />
-          )}
-        </div>
-      </section>
-
       <TextInput
+        value={title}
         placeholder="가이드북 제목"
         maxLength={20}
         onChange={(e) => onTitleChange(e.target.value)}
-        // className="group-focus-within:-top-2.25 not-placeholder-shown:-top-2.25 transition-[top]" /* 원본 컴포넌트 수정 가능하다면 삭제하기 */
       />
 
       <DescriptionTextarea value={description} onChange={onDescriptionChange} />

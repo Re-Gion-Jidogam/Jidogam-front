@@ -1,39 +1,92 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 import ActionSheet from "@/components/ActionSheet";
 import PlaceCard from "@/components/PlaceCard";
+import Toast from "@/components/Toast";
 
-import { dummyPlaces } from "../../../_domain/mocks/dummyPlaces";
 import { useSearchFilterStore } from "../../../_domain/store/useSearchFilterStore";
-import { GUIDEBOOK_COUNT, PLACE_COUNT } from "../constants/guidebookConstants";
+import type { GuidebookPlaceFilter } from "@/app/map/guidebook/_domain/api/guidebook.api";
+import { toPlaceCardProps } from "@/app/map/guidebook/_domain/api/guidebook.api";
+import { useGuidebookPlacesQuery } from "../queries/useGuidebookPlacesQuery";
+import { useRemovePlaceMutation } from "../hooks/useRemovePlaceMutation";
 
 interface PlaceSectionProps {
-  isOwner: boolean;
-  onEdit: () => void;
-  onDelete: () => void;
+  guidebookId: string | null;
+  isAuthor: boolean;
+  totalPlaceCount: number;
 }
 
-export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
+function deriveFilter(
+  showVisited: boolean,
+  showUnvisited: boolean,
+): GuidebookPlaceFilter | undefined {
+  if (showVisited === showUnvisited) return undefined;
+  return showVisited ? "visited" : "notVisited";
+}
+
+
+export function PlaceSection({
+  guidebookId,
+  isAuthor,
+  totalPlaceCount,
+}: PlaceSectionProps) {
   const router = useRouter();
   const { showVisited, showUnvisited, toggleVisited, toggleUnvisited } =
     useSearchFilterStore();
 
+  const filter = deriveFilter(showVisited, showUnvisited);
+
+  const {
+    data,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGuidebookPlacesQuery({ guidebookId, filter });
+
+  const places = data?.pages.flatMap((page) => page.data) ?? [];
+
   const [selectedPid, setSelectedPid] = useState<string | null>(null);
+  const [errorToast, setErrorToast] = useState(false);
+  const [deleteToast, setDeleteToast] = useState<"success" | "error" | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const noneActive = !showVisited && !showUnvisited;
-  const bothActive = showVisited && showUnvisited;
+  const { mutate: removePlace } = useRemovePlaceMutation({
+    guidebookId: guidebookId ?? "",
+    onSuccess: () => setDeleteToast("success"),
+    onError: () => setDeleteToast("error"),
+  });
 
-  let filteredPlaces = dummyPlaces;
-  if (!noneActive && !bothActive) {
-    if (showVisited)
-      filteredPlaces = dummyPlaces.filter((place) => place.visited);
-    if (showUnvisited)
-      filteredPlaces = dummyPlaces.filter((place) => !place.visited);
-  }
+  useEffect(() => {
+    if (!isError) return;
+    setErrorToast(true);
+    const timer = setTimeout(() => setErrorToast(false), 3000);
+    return () => clearTimeout(timer);
+  }, [isError]);
+
+  useEffect(() => {
+    if (!deleteToast) return;
+    const timer = setTimeout(() => setDeleteToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, [deleteToast]);
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) fetchNextPage();
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   function handlePlaceClick(pid: string) {
     router.push(`/map/place/${pid}`);
@@ -43,13 +96,8 @@ export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
     setSelectedPid(pid);
   }
 
-  function handleEditClick() {
-    onEdit();
-    setSelectedPid(null);
-  }
-
   function handleDeleteClick() {
-    onDelete();
+    if (selectedPid) removePlace(selectedPid);
     setSelectedPid(null);
   }
 
@@ -59,8 +107,24 @@ export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
 
   return (
     <div className="pb-5">
+      {errorToast && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="NOT_MOVE" title="장소를 불러오지 못했어요" message="" />
+        </div>
+      )}
+      {deleteToast === "success" && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="MOVE" title="장소를 삭제했어요" message="" />
+        </div>
+      )}
+      {deleteToast === "error" && (
+        <div className="fixed top-0 left-0 right-0 z-100 w-full">
+          <Toast type="NOT_MOVE" title="장소 삭제에 실패했어요" message="" />
+        </div>
+      )}
+
       <p className="px-5 mb-3 text-sm font-semibold text-gray-900">
-        {PLACE_COUNT}개의 장소
+        {totalPlaceCount.toLocaleString()}개의 장소
       </p>
 
       <div className="flex gap-2 px-5 mb-3">
@@ -90,47 +154,43 @@ export function PlaceSection({ isOwner, onEdit, onDelete }: PlaceSectionProps) {
         </button>
       </div>
 
-      <div className="flex flex-col gap-4 px-5 mb-6">
-        {filteredPlaces.map((place) => (
-          <div
-            key={place.pid}
-            role="button"
-            tabIndex={0}
-            className="text-left w-full cursor-pointer"
-            onClick={() => handlePlaceClick(place.pid)}
-            onKeyDown={(e) => e.key === "Enter" && handlePlaceClick(place.pid)}
-          >
-            <PlaceCard
-              pid={place.pid}
-              name={place.name}
-              category={place.category}
-              point={place.rating}
-              address={place.address}
-              visitedDate=""
-              guidebookCount={GUIDEBOOK_COUNT}
-              variant="bottom-button"
-              className="w-full! bg-white"
-              onOptionClick={
-                isOwner ? () => handleOptionClick(place.pid) : undefined
-              }
-            />
-          </div>
-        ))}
-      </div>
+      {places.length === 0 ? (
+        <p className="px-5 py-10 text-center text-sm text-gray-500">
+          장소가 없어요
+        </p>
+      ) : (
+        <div className="flex flex-col gap-4 px-5 mb-6">
+          {places.map((place) => (
+            <div
+              key={place.pid}
+              role="button"
+              tabIndex={0}
+              className="text-left w-full cursor-pointer"
+              onClick={() => handlePlaceClick(place.pid)}
+              onKeyDown={(e) => e.key === "Enter" && handlePlaceClick(place.pid)}
+            >
+              <PlaceCard
+                {...toPlaceCardProps(place)}
+                variant="bottom-button"
+                className="w-full! bg-white"
+                onOptionClick={
+                  isAuthor ? () => handleOptionClick(place.pid) : undefined
+                }
+              />
+            </div>
+          ))}
+          <div ref={loadMoreRef} />
+        </div>
+      )}
 
       {selectedPid !== null && (
         <ActionSheet
           actionSheetTitle="장소 관리"
           onClickBackdrop={handleCloseActionSheet}
           body={
-            <>
-              <ActionSheet.Button onClick={handleEditClick}>
-                편집하기
-              </ActionSheet.Button>
-              <ActionSheet.Button onClick={handleDeleteClick}>
-                삭제
-              </ActionSheet.Button>
-            </>
+            <ActionSheet.Button onClick={handleDeleteClick}>
+              삭제
+            </ActionSheet.Button>
           }
           footer={
             <ActionSheet.Button onClick={handleCloseActionSheet}>
